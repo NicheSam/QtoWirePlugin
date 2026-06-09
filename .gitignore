@@ -1,0 +1,15 @@
+bin/
+obj/
+release/
+
+*.dll
+*.pdb
+*.cache
+*.user
+*.suo
+*.log
+*.tmp
+
+.vs/
+.idea/
+
