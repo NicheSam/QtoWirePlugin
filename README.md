@@ -22,6 +22,17 @@ QtoWirePlugin 透過 AutoCAD XData 保存這些資訊，並提供標記、檢查
 | --- | --- | --- |
 | v0.5 | `v0.5/` | AutoCAD 2023、Win64、.NET Framework 4.8 |
 
+## 下載與安裝
+
+一般使用者請不要使用 GitHub 的 `Code > Download ZIP`，那是原始碼 ZIP，不包含完整安裝檔。
+
+請從 GitHub Releases 下載完整安裝包：
+
+- [QtoWirePlugin v0.5 Release](https://github.com/NicheSam/QtoWirePlugin/releases/tag/v0.5)
+- [QtoWirePlugin_v0.5_installer.zip](https://github.com/NicheSam/QtoWirePlugin/releases/download/v0.5/QtoWirePlugin_v0.5_installer.zip)
+
+下載後解壓縮，執行資料夾內的 `安裝或更新_QtoWirePlugin.bat`。安裝前請先完全關閉 AutoCAD。
+
 ## 主要功能
 
 - 標記出線口與結線箱。
@@ -52,5 +63,4 @@ QtoWirePlugin/
 
 ## 狀態
 
-這是外掛原始碼專案，不包含已編譯 DLL 或正式發布包。使用前需在本機建置並安裝到 AutoCAD。
-
+這個 repo 保留外掛原始碼。正式給使用者安裝的 ZIP 會放在 GitHub Releases，不建議從原始碼 ZIP 安裝。

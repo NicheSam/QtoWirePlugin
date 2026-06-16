@@ -59,6 +59,27 @@ msbuild QtoWirePlugin.csproj /p:Configuration=Release /p:Platform=x64
 
 ## 安裝到 AutoCAD
 
+### 一般使用者
+
+請從 GitHub Releases 下載完整安裝包，不要使用 GitHub 的 `Code > Download ZIP`。
+
+- [QtoWirePlugin v0.5 Release](https://github.com/NicheSam/QtoWirePlugin/releases/tag/v0.5)
+- [QtoWirePlugin_v0.5_installer.zip](https://github.com/NicheSam/QtoWirePlugin/releases/download/v0.5/QtoWirePlugin_v0.5_installer.zip)
+
+使用方式：
+
+1. 下載並解壓縮 `QtoWirePlugin_v0.5_installer.zip`。
+2. 完全關閉 AutoCAD。
+3. 執行 `安裝或更新_QtoWirePlugin.bat`。
+4. 重新啟動 AutoCAD。
+5. 如果 Ribbon 沒有出現，執行：
+
+```text
+QTO_SHOW_UI
+```
+
+### 開發者手動安裝
+
 1. 建置 `QtoWirePlugin.dll`。
 2. 將 DLL 複製到：
 
@@ -161,4 +182,3 @@ QTO_HELLO
 - 外掛會修改圖面物件 XData。
 - 此版本以 AutoCAD 2023 為目標；其他版本可能需要調整專案引用與 bundle 設定。
 - 編譯後 DLL、PDB、`bin/`、`obj/` 與發布包不屬於原始碼版本。
-
