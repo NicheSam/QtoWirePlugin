@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using Autodesk.AutoCAD.DatabaseServices;
 
@@ -48,12 +49,47 @@ namespace QtoWirePlugin
                 }
             }
 
+            foreach (string bundleCandidate in GetBundleDictionaryCandidates())
+            {
+                if (!string.IsNullOrWhiteSpace(bundleCandidate) && Directory.Exists(bundleCandidate))
+                {
+                    return bundleCandidate;
+                }
+            }
+
             if (Directory.Exists(DefaultDictionaryDirectory))
             {
                 return DefaultDictionaryDirectory;
             }
 
             return string.Empty;
+        }
+
+        private static IEnumerable<string> GetBundleDictionaryCandidates()
+        {
+            List<string> candidates = new List<string>();
+            string assemblyPath = Assembly.GetExecutingAssembly().Location;
+            if (string.IsNullOrWhiteSpace(assemblyPath))
+            {
+                return candidates;
+            }
+
+            string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+            if (string.IsNullOrWhiteSpace(assemblyDirectory))
+            {
+                return candidates;
+            }
+
+            candidates.Add(Path.Combine(assemblyDirectory, "m2_m4_shared_dictionary"));
+
+            DirectoryInfo directory = new DirectoryInfo(assemblyDirectory);
+            for (int i = 0; i < 3 && directory != null; i++)
+            {
+                candidates.Add(Path.Combine(directory.FullName, "m2_m4_shared_dictionary"));
+                directory = directory.Parent;
+            }
+
+            return candidates;
         }
 
         private static void LoadSystemCodes(QtoDictionaryStore store, string path)

@@ -1,0 +1,14 @@
+system_code,system_name,domain,scope_note,m2_relevance,m4_relevance,review_note
+PARK,停車管理系統,weak_current,停車收費、車牌辨識、車位偵測、停車誘導與停管管線,true,true,需區分設備本體、管線、軟體、工資與後續擴充
+ACS,門禁管制系統,weak_current,讀卡機、控制器、門禁權限、出入口控制與消防連動,true,true,需確認管制門清單與消防連動
+CCTV,監視系統,weak_current,攝影機、錄影、影像管理、影像連動與遠端監看,true,true,需確認保存天數、鏡頭型式與隱私遮蔽
+BMS,中央監控系統,weak_current,圖控、監控主機、控制器、I/O、告警、趨勢與跨系統整合,true,true,需確認監視或控制、整合介面與點數
+EMS,能源管理系統,weak_current,電力監視、需量控制、能源資料、報表與節能管理,true,true,需確認分項範圍、電錶通訊與控制權限
+LAN,資訊網路系統,weak_current,交換器、光纖、網路主機、VLAN、資安與通訊基礎,true,true,需確認網路邊界、PoE、管理權限與備援
+TEL,電話與通訊系統,weak_current,電話、語音、VoIP、公眾通信涵蓋與行動通訊,true,true,需確認自建或租用服務與涵蓋範圍
+PA,廣播與對講系統,weak_current,喇叭、擴大機、對講、緊急廣播與通報,true,true,需確認廣播分區、消防連動與語音服務範圍
+IAQ,室內空氣品質 / 環境感測,weak_current,CO2、PM2.5、TVOC、溫濕度、照度、水質與環境顯示,true,true,需確認感測位置、校正與顯示方式
+ELV_WIRE,弱電配線與管線,weak_current,弱電配管、配線、線槽、光纖、網路線與相關另料,true,true,需確認線路路徑、數量與責任分界
+TEST_LABOR,安裝測試與教育訓練,cost_support,設備安裝、調整、測試、試運轉、教育訓練與文件,true,true,需確認是否屬設備附屬或獨立計價
+UNKNOWN,未分類 / 待確認,review,無法穩定歸類的需求、圖塊或標單品項,false,false,不得進入正式 CAD 或報價流程
+
