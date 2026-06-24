@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage
+  SchemaVersion="1.0"
+  AutodeskProduct="AutoCAD"
+  ProductType="Application"
+  Name="QtoWirePlugin V0.6"
+  Description="QTO weak-current wiring workflow tools for AutoCAD 2023."
+  AppVersion="0.6.0"
+  ProductCode="{0C53C504-3DC0-40A1-B36A-6479D7196774}">
+  <CompanyDetails
+    Name="DEX"
+    Url=""
+    Email="" />
+  <RuntimeRequirements
+    OS="Win64"
+    Platform="AutoCAD"
+    SeriesMin="R24.2"
+    SeriesMax="R24.2" />
+  <Components Description="QtoWirePlugin V0.6 managed .NET assembly">
+    <RuntimeRequirements
+      OS="Win64"
+      Platform="AutoCAD"
+      SeriesMin="R24.2"
+      SeriesMax="R24.2" />
+    <ComponentEntry
+      AppName="QtoWirePlugin"
+      AppDescription="QTO weak-current wiring workflow tools"
+      ModuleName="./Contents/Windows/QtoWirePlugin.dll"
+      LoadOnAutoCADStartup="True"
+      LoadOnCommandInvocation="True">
+      <Commands GroupName="QtoWirePlugin">
+        <Command Global="QTO_HELLO" Local="QTO_HELLO" />
+        <Command Global="QTO_SHOW_UI" Local="QTO_SHOW_UI" />
+        <Command Global="QTO_PANEL" Local="QTO_PANEL" />
+        <Command Global="QTO_TEST_XDATA" Local="QTO_TEST_XDATA" />
+        <Command Global="QTO_CREATE_CONNECTIONS" Local="QTO_CREATE_CONNECTIONS" />
+        <Command Global="QTO_MARK_OUTLETS" Local="QTO_MARK_OUTLETS" />
+        <Command Global="QTO_MARK_JB" Local="QTO_MARK_JB" />
+        <Command Global="QTO_NUMBER_OUTLETS" Local="QTO_NUMBER_OUTLETS" />
+        <Command Global="QTO_ASSIGN_JB" Local="QTO_ASSIGN_JB" />
+        <Command Global="QTO_BIND_WIRE" Local="QTO_BIND_WIRE" />
+        <Command Global="QTO_BATCH_BIND_WIRE" Local="QTO_BATCH_BIND_WIRE" />
+        <Command Global="QTO_RECALC_WIRE" Local="QTO_RECALC_WIRE" />
+        <Command Global="QTO_CHECK_WIRE" Local="QTO_CHECK_WIRE" />
+        <Command Global="QTO_HIGHLIGHT_ERRORS" Local="QTO_HIGHLIGHT_ERRORS" />
+        <Command Global="QTO_CLEAR_ERROR_HIGHLIGHT" Local="QTO_CLEAR_ERROR_HIGHLIGHT" />
+        <Command Global="QTO_QUERY_OUTLET" Local="QTO_QUERY_OUTLET" />
+        <Command Global="QTO_QUERY_WIRE" Local="QTO_QUERY_WIRE" />
+        <Command Global="QTO_UNBIND_WIRE" Local="QTO_UNBIND_WIRE" />
+        <Command Global="QTO_DELETE_OUTLET_INFO" Local="QTO_DELETE_OUTLET_INFO" />
+        <Command Global="QTO_DELETE_JB_INFO" Local="QTO_DELETE_JB_INFO" />
+        <Command Global="QTO_EDIT_OUTLET_PROPERTIES" Local="QTO_EDIT_OUTLET_PROPERTIES" />
+        <Command Global="QTO_EDIT_JB_PROPERTIES" Local="QTO_EDIT_JB_PROPERTIES" />
+        <Command Global="QTO_CALLOUT_TO_JB" Local="QTO_CALLOUT_TO_JB" />
+        <Command Global="QTO_LABEL_OUTLETS" Local="QTO_LABEL_OUTLETS" />
+        <Command Global="QTO_CLEAR_TRAY_PROPERTIES" Local="QTO_CLEAR_TRAY_PROPERTIES" />
+        <Command Global="QTO_RESET_OUTLET" Local="QTO_RESET_OUTLET" />
+        <Command Global="QTO_REASSIGN_WIRE" Local="QTO_REASSIGN_WIRE" />
+        <Command Global="QTO_EXPORT_OUTLETS" Local="QTO_EXPORT_OUTLETS" />
+        <Command Global="QTO_MARK_TRAY" Local="QTO_MARK_TRAY" />
+        <Command Global="QTO_SCAN_TRAY_NETWORK" Local="QTO_SCAN_TRAY_NETWORK" />
+        <Command Global="QTO_ROUTE_BY_TRAY" Local="QTO_ROUTE_BY_TRAY" />
+        <Command Global="QTO_BATCH_ROUTE_BY_TRAY" Local="QTO_BATCH_ROUTE_BY_TRAY" />
+        <Command Global="QTO_CONDUIT_TO_TRAY" Local="QTO_CONDUIT_TO_TRAY" />
+        <Command Global="QTO_EXPORT_JB_SUMMARY" Local="QTO_EXPORT_JB_SUMMARY" />
+        <Command Global="QTO_EXPORT_CONDUIT_SUMMARY" Local="QTO_EXPORT_CONDUIT_SUMMARY" />
+        <Command Global="QTO_PROPERTY_PANEL" Local="QTO_PROPERTY_PANEL" />
+        <Command Global="QTO_EXPORT_BUDGET_INPUT" Local="QTO_EXPORT_BUDGET_INPUT" />
+        <Command Global="QTO_SELECT_UNTAGGED" Local="QTO_SELECT_UNTAGGED" />
+        <Command Global="QTO_SELECT_SAME_QTO" Local="QTO_SELECT_SAME_QTO" />
+        <Command Global="MEPDIMINIT" Local="MEPDIMINIT" />
+        <Command Global="MEPCEILDIM" Local="MEPCEILDIM" />
+        <Command Global="MEPDIMRULE" Local="MEPDIMRULE" />
+      </Commands>
+    </ComponentEntry>
+  </Components>
+</ApplicationPackage>
