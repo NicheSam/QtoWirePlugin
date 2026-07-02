@@ -1,0 +1,43 @@
+bid_mapping_id,equipment_type_code,bid_item_id,item_no,bid_item_name,unit,match_basis,mapping_status,blocks_m2,blocks_m4,review_reason
+BIDMAP-001,PARK_LPR_CAMERA,BID-0460,壹.二.15.2.1-0,產品，步道、道路及停車場附屬設施，車牌辨識攝影機組(含車牌鏡頭、輔助光源),組,標單名稱含車牌辨識攝影機組,candidate,false,false,需確認是否含補光與安裝
+BIDMAP-002,PARK_TICKET_MACHINE,BID-0462,壹.二.15.2.3-0,產品，步道、道路及停車場附屬設施，入口出票機暨感應式讀卡機,座,標單名稱含入口出票機與讀卡機,candidate,false,false,需確認與門禁讀卡機是否分流
+BIDMAP-003,PARK_TICKET_MACHINE,BID-0463,壹.二.15.2.4-0,產品，步道、道路及停車場附屬設施，出口驗票機暨感應式讀卡機,座,標單名稱含出口驗票機與讀卡機,candidate,false,false,需確認入口出口設備型式
+BIDMAP-004,ACS_CARD_READER,BID-0467,壹.二.15.2.8-0,產品，門禁管制設備，周邊設備，晶片閱讀機,台,標單名稱含門禁管制設備與晶片閱讀機,candidate,false,false,需確認是停車系統或建築門禁
+BIDMAP-005,PARK_SIGN_DISPLAY,BID-0468,壹.二.15.2.9-0,產品，門禁管制設備，周邊設備，金額顯示器,台,標單名稱含顯示器,candidate,false,false,需確認顯示內容與停車收費系統關係
+BIDMAP-006,PARK_SIGN_DISPLAY,BID-0470,壹.二.15.2.11-0,產品，門禁管制設備，周邊設備，車位計數盤-壁掛式,台,標單名稱含車位計數盤,candidate,false,false,需確認壁掛位置與訊號來源
+BIDMAP-007,BMS_WORKSTATION,BID-0471,壹.二.15.2.12-0,產品，門禁管制設備，周邊設備，中央主控暨車牌辨識電腦(含營運管理軟體及車牌辨識軟體),台,標單名稱含中央主控與車牌辨識電腦,candidate,false,false,需確認歸類為停車主機或 BMS 工作站
+BIDMAP-008,PARK_PAYMENT_MACHINE,BID-0472,壹.二.15.2.13-0,產品，門禁管制設備，周邊設備，全自動繳費機(具多卡通支付功能),台,標單名稱含全自動繳費機,candidate,false,false,需確認支付與發票介面
+BIDMAP-009,PARK_LOOP_DETECTOR,BID-0474,壹.二.15.2.15-0,產品，中央監視主控制設備，周邊設備，車輛偵測器,台,標單名稱含車輛偵測器,candidate,false,false,需確認是車位偵測或車道偵測
+BIDMAP-010,LAN_SWITCH,BID-0475,壹.二.15.2.16-0,產品，交換式網路集線器，24埠L2高速網路交換器,台,標單名稱含網路交換器,candidate,false,false,需確認管理等級與 PoE
+BIDMAP-011,PARK_LOOP_DETECTOR,BID-0478,壹.二.15.2.19-0,產品，中央監視主控制設備，不斷電系統，3kVA,台,停車設備周邊 UPS,candidate,false,false,需確認 UPS 是否應獨立 equipment_type
+BIDMAP-012,ACS_CARD_READER,BID-0479,壹.二.15.2.20-0,產品，步道、道路及停車場附屬設施，e-Tag長距離感應式讀卡機(含控制器及支架),台,標單名稱含 e-Tag 長距離感應式讀卡機,candidate,false,false,需確認車道讀卡與門禁讀卡分流
+BIDMAP-013,LAN_SWITCH,BID-0487,壹.二.15.2.28-0,產品，步道、道路及停車場附屬設施，通訊解碼介面卡(置於中央主控電腦內),張,標單名稱含通訊解碼介面卡,candidate,false,false,需確認是否為停車主機附屬
+BIDMAP-014,TEST_INSTALL,BID-0495,壹.二.15.2.36-0,室內配線、配電線路裝修技術工，設備安裝、調整、測試工資,式,標單名稱含設備安裝調整測試工資,candidate,true,false,工資類不對應 CAD 圖塊
+BIDMAP-015,TEST_TRAINING_DOC,BID-0494,壹.二.15.2.35-0,操作及維護，教育訓練及文件費,式,標單名稱含教育訓練及文件費,candidate,true,false,文件費不對應 CAD 圖塊
+BIDMAP-016,CCTV_VMS_NVR,BID-0525,壹.二.15.4.3-0,產品，中央監視主控制設備，周邊設備，影像處理軟體(置於車位在席管理電腦內),套,標單名稱含影像處理軟體,candidate,false,false,需確認是否為車位在席系統或 CCTV VMS
+BIDMAP-017,CCTV_VMS_NVR,BID-0526,壹.二.15.4.4-0,產品，中央監視主控制設備，周邊設備，智慧尋車管理軟體(置於智慧尋車管理電腦內),套,標單名稱含智慧尋車管理軟體,candidate,false,false,需確認是否對應影像辨識或尋車系統
+BIDMAP-018,BMS_WORKSTATION,BID-0527,壹.二.15.4.5-0,產品，中央監視主控制設備，周邊設備，智慧尋車管理電腦,台,標單名稱含智慧尋車管理電腦,candidate,false,false,需確認是否為停車系統工作站
+BIDMAP-019,LAN_SWITCH,BID-0528,壹.二.15.4.6-0,產品，交換式網路集線器，8埠L2乙太網路交換器(8S),台,標單名稱含 8 埠 L2 交換器,candidate,false,false,需確認 PoE 與安裝位置
+BIDMAP-020,CCTV_CAMERA,BID-0529,壹.二.15.4.7-0,產品，中央監視主控制設備，周邊設備，智慧尋車系統車牌辨識中繼箱(內含電源供應器),只,標單名稱含車牌辨識中繼箱,candidate,false,false,需確認歸類為中繼箱或攝影機附屬
+BIDMAP-021,LAN_FIBER_CONVERTER,BID-0530,壹.二.15.4.8-0,產品，中央監視主控制設備，周邊設備，光纖轉換器,組,標單名稱含光纖轉換器,candidate,false,false,需確認端點與光纖芯數
+BIDMAP-022,TEST_TRAINING_DOC,BID-0532,壹.二.15.4.10-0,操作及維護，教育訓練及文件費,式,標單名稱含教育訓練及文件費,candidate,true,false,文件費不對應 CAD 圖塊
+BIDMAP-023,TEST_INSTALL,BID-0533,壹.二.15.4.11-0,室內配線、配電線路裝修技術工，設備安裝、調整、測試工資,式,標單名稱含設備安裝調整測試工資,candidate,true,false,工資類不對應 CAD 圖塊
+BIDMAP-024,ELV_CONDUIT,BID-0440,壹.二.15,停車場收費管理設備工程(本工程僅施作管線，設備屬後續擴充工程),,標單名稱含停車場收費管理設備工程與管線,blocked,false,true,章節或工程群組層級，不能當計價明細
+BIDMAP-025,ELV_CONDUIT,BID-0441,壹.二.15.1,停管管線工程,,標單名稱含停管管線工程,blocked,false,true,章節層級，需拆到明細
+BIDMAP-026,ELV_CONDUIT,BID-0443,壹.二.15.1.2,產品，步道、道路及停車場附屬設施，工具損耗、配管另料及其他,式,標單名稱含配管另料,candidate,false,false,需確認是否可獨立計價
+BIDMAP-027,ELV_CONDUIT,BID-0444,壹.二.15.1.3,產品，步道、道路及停車場附屬設施，配管工資,式,標單名稱含配管工資,candidate,false,false,工資類需確認是否與材料分列
+BIDMAP-028,ELV_CABLE,BID-0453,壹.二.15.1.12,產品，步道、道路及停車場附屬設施，光纖4C,M,標單名稱含光纖4C,candidate,false,false,需確認路徑與端接範圍
+BIDMAP-029,LAN_FIBER_CONVERTER,BID-0454,壹.二.15.1.13,產品，步道、道路及停車場附屬設施，光纖熔接及相關零件,式,標單名稱含光纖熔接,candidate,false,false,需確認是否屬施工費或材料另料
+BIDMAP-030,ELV_CABLE,BID-0455,壹.二.15.1.14,產品，步道、道路及停車場附屬設施，工具損耗、配線另料及其他,式,標單名稱含配線另料,candidate,false,false,需確認是否可獨立計價
+BIDMAP-031,ELV_CABLE,BID-0456,壹.二.15.1.15,產品，步道、道路及停車場附屬設施，配線工資,式,標單名稱含配線工資,candidate,false,false,工資類需確認是否與材料分列
+BIDMAP-032,EMS_POWER_METER,BID-0605,壹.三.1.1.3.6,產品，儀表、電驛及控制裝置，微處理型多功能電錶144*144  (具RS485輸出諧波量顯示及隔離變壓器與螢幕保護程式),只,標單名稱含多功能電錶與 RS485,candidate,false,false,需確認盤別與通訊介面
+BIDMAP-033,EMS_POWER_METER,BID-0645,壹.三.1.1.4.6,產品，儀表、電驛及控制裝置，微處理型多功能電錶144*144  (具RS485輸出諧波量顯示及隔離變壓器與螢幕保護程式),只,標單名稱含多功能電錶與 RS485,candidate,false,false,需確認是否與 BID-0605 同規格不同盤別
+BIDMAP-034,EMS_POWER_METER,BID-0685,壹.三.1.1.5.6,產品，儀表、電驛及控制裝置，微處理型多功能電錶144*144  (具RS485輸出諧波量顯示及隔離變壓器與螢幕保護程式),只,標單名稱含多功能電錶與 RS485,candidate,false,false,需確認是否與其他盤別重複
+BIDMAP-035,EMS_DEMAND_CONTROL,BID-0702,壹.三.1.1.6.1,"產品，電力監視及控制設備，電力安全管理伺服主機(網路通訊版)(網路通訊,排程控制+需量控制輸出)",套,標單名稱含電力安全管理伺服主機與需量控制,candidate,false,false,需確認控制權限與軟體範圍
+BIDMAP-036,EMS_DEMAND_CONTROL,BID-0703,壹.三.1.1.6.2,"產品，電力監視及控制設備，伺服主機 (通訊,排程+需量控制輸出)軟體",套,標單名稱含需量控制軟體,candidate,false,false,需確認與主機是否分列
+BIDMAP-037,EMS_DEMAND_CONTROL,BID-0704,壹.三.1.1.6.3,產品，電力監視及控制設備，控制與排程輸出模組,套,標單名稱含控制與排程輸出模組,candidate,false,false,需確認 I/O 與控制迴路
+BIDMAP-038,EMS_DEMAND_CONTROL,BID-0710,壹.三.1.1.6.9,產品，電力監視及控制設備，需量控制系統設定測試及教育訓練,式,標單名稱含需量控制系統設定測試及教育訓練,candidate,true,false,測試教育訓練不對應 CAD 圖塊
+BIDMAP-039,EMS_DEMAND_CONTROL,BID-0713,壹.三.1.1.6.12,產品，電力監視及控制設備，區網型LED遠距離需量既時顯示警報模組 (TCPIP),只,標單名稱含需量顯示警報模組,candidate,false,false,需確認顯示器位置與通訊方式
+BIDMAP-040,LAN_SWITCH,BID-0607,壹.三.1.1.3.8,產品，網路集線器，HUB 網路集線器 (工業型),只,標單名稱含網路集線器,candidate,false,false,需確認是否工業型交換器
+BIDMAP-041,TEST_INSTALL,BID-1630,壹.三.1.2.46.5,雜費，電氣顧問公司依台電公司及現行法令之規定，對本工程送電前應檢測之所有設備進行試驗(含所有保護電驛動作特性試驗),式,標單名稱含試驗,candidate,true,false,試驗費不對應 CAD 圖塊
+BIDMAP-042,UNKNOWN_EQUIPMENT,BID-0001,壹,發包工程費,,標單總章層級,blocked,true,true,總章層級不得進入 M2/M4 mapping

@@ -1,0 +1,22 @@
+equipment_type_code,equipment_type_name,system_code,keywords,typical_cad_need,typical_bid_need,quantity_basis,default_mapping_status,review_note
+PARK_LPR_CAMERA,車牌辨識攝影機組,PARK,車牌辨識;攝影機;輔助光源,block/layer/symbol,設備本體;安裝;測試,點位或車道,candidate,需確認車道環境與辨識規則
+PARK_TICKET_MACHINE,入口出票機 / 驗票機,PARK,出票機;驗票機;讀卡機,block/layer/symbol,設備本體;安裝;通訊,設備台數,candidate,需確認入口出口與收費流程
+PARK_PAYMENT_MACHINE,全自動繳費機,PARK,繳費機;多卡通;支付,block/layer/symbol,設備本體;軟體;安裝,設備台數,candidate,需確認支付介面與發票需求
+PARK_LOOP_DETECTOR,感應線圈 / 車輛偵測器,PARK,感應線圈;車輛偵測器;偵測,block/layer/symbol,設備本體;埋設;配線,迴路或車道,candidate,需確認埋設方式與車道數
+PARK_SIGN_DISPLAY,車位計數盤 / 資訊顯示,PARK,車位計數盤;資訊座;LCD;LED,block/layer/symbol,設備本體;通訊;安裝,設備台數,candidate,需確認顯示內容與資料來源
+ACS_CARD_READER,晶片閱讀機 / 讀卡機,ACS,晶片閱讀機;讀卡機;感應式讀卡,block/layer/symbol,設備本體;門禁配線;安裝,管制門或點位,candidate,需確認門禁門清單與卡片規格
+ACS_CONTROLLER,門禁控制器,ACS,門禁控制器;IO控制模組;出入口控制,block/layer/symbol,設備本體;箱體;配線,控制門數,candidate,需確認消防連動與離線策略
+CCTV_CAMERA,監視攝影機,CCTV,攝影機;監視;CCTV;鏡頭,block/layer/symbol,設備本體;配線;安裝,攝影機點位,candidate,需確認鏡頭型式與保存天數
+CCTV_VMS_NVR,影像管理 / 錄影設備,CCTV,影像處理;錄影;VMS;NVR;管理軟體,diagram/schedule,主機;軟體;授權;儲存,通道數或套數,candidate,需確認授權與儲存容量
+BMS_WORKSTATION,中央監控主機 / 工作站,BMS,中央監視主控制;主控電腦;圖控,diagram/schedule,主機;軟體;授權;UPS,套數,candidate,需確認整合子系統與操作畫面
+BMS_CONTROLLER_IO,控制器 / I/O 模組,BMS,控制器;IO控制模組;控制模組,block/layer/symbol,控制器;I/O;箱體;配線,點數或控制箱,candidate,需確認 I/O 點表與責任界面
+EMS_POWER_METER,多功能電錶 / 電力監測器,EMS,多功能電錶;電力品質;電力參數,block/layer/symbol,電錶;通訊;測試,迴路或盤別,candidate,需確認通訊協定與盤別
+EMS_DEMAND_CONTROL,需量控制設備 / 軟體,EMS,需量控制;排程控制;電力安全管理,diagram/schedule,主機;軟體;控制模組;教育訓練,套數,candidate,需確認卸載權限與控制策略
+LAN_SWITCH,網路交換器,LAN,交換器;集線器;HUB;L2,block/layer/symbol,設備本體;機櫃;配線,台數或埠數,candidate,需確認 PoE、埠數與管理等級
+LAN_FIBER_CONVERTER,光纖轉換器 / 光纖熔接,LAN,光纖轉換器;光纖熔接;光纖,block/layer/symbol,設備本體;熔接;測試,組數或芯數,candidate,需確認光纖路徑與測試標準
+PA_SPEAKER,天花喇叭 / 廣播喇叭,PA,喇叭;天花喇叭;廣播喇叭;CEILING_SPEAKER,block/layer/symbol,設備本體;配線;安裝,喇叭點位,candidate,需確認廣播分區、消防連動與功率
+ELV_CONDUIT,弱電配管 / 管線,ELV_WIRE,配管;管線;線槽;另料,layer/schedule,配管;另料;工資,長度或式,candidate,需確認路徑、規格與責任分界
+ELV_CABLE,弱電配線 / 線材,ELV_WIRE,配線;導線;電纜;網路線,layer/schedule,線材;端接;測試,長度或點位,candidate,需確認線種、路徑與端接範圍
+TEST_INSTALL,設備安裝調整測試,TEST_LABOR,安裝;調整;測試;試驗;工資,schedule,工資;測試;試運轉,式,candidate,需確認是否重複包含於設備單價
+TEST_TRAINING_DOC,教育訓練與文件,TEST_LABOR,教育訓練;文件費;操作及維護,schedule,教育訓練;文件;維護手冊,式,candidate,需確認交付文件與訓練對象
+UNKNOWN_EQUIPMENT,未識別設備,UNKNOWN,未知;待確認,review_only,review_only,未明確,blocked,不得進入 M2/M4 mapping
