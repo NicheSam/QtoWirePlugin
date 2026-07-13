@@ -1,0 +1,14 @@
+review_rule_id,trigger,applies_to,blocks_m2,blocks_m4,default_priority,review_reason,suggested_owner
+REV-M2-001,無 equipment_type_code,M2/M4,true,true,高,未建立共用設備類型，無法進入 CAD 或報價映射,弱電設計 / 估算
+REV-M2-002,CAD 圖塊名稱為匿名或亂碼,M2,true,false,高,無法確認圖塊代表的設備類型,繪圖人員 / CAD 管理
+REV-M2-003,設備類型只有系統圖或設備表需求但無平面圖塊,M2,true,false,中,不一定有平面 block，需確認出圖方式,弱電設計
+REV-M2-004,圖層名稱與設備系統不一致,M2,true,false,中,可能跨系統或圖層命名不一致,繪圖人員
+REV-M4-001,標單品項為章節或小計,M4,false,true,高,不是可計價明細，不得作為候選報價品項,估算人員
+REV-M4-002,標單單位空白,M4,false,true,高,無法判斷計價單位,估算人員
+REV-M4-003,設備可能含材料與工資但未拆分,M4,false,true,中,需確認是否重複計價或漏計,估算人員
+REV-M4-004,工資或教育訓練類項目,M2/M4,true,false,中,通常不對應 CAD 圖塊，但可保留報價候選,估算人員
+REV-BOTH-001,數量來源不明,M2/M4,true,true,高,不可產生正式 CAD 數量或正式報價數量,弱電設計 / 估算
+REV-BOTH-002,同一設備可對應多個標單品項,M2/M4,false,true,高,需人工決定主品項、附屬品項與工資拆分,估算人員
+REV-BOTH-003,需求只寫依圖說或依業主需求,M2/M4,true,true,高,缺少可轉換成圖塊或報價品項的具體資訊,設計窗口
+REV-BOTH-004,設備位置不明,M2,true,false,高,CAD 圖塊映射不能取代點位確認,弱電設計
+REV-BOTH-005,責任界面不明,M2/M4,true,true,高,可能影響圖說、設備供應、安裝與報價責任,專案窗口

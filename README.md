@@ -8,8 +8,9 @@ QtoWirePlugin 是 AutoCAD 2023 使用的弱電 QTO 外掛，用於弱電設計�
 
 | 版本 | 資料夾 | 目標環境 | 狀態 |
 | --- | --- | --- | --- |
-| v0.7 | `v0.7/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 目前版本 |
-| v0.6 | `v0.6/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 前一版 |
+| v0.8.2 | `v0.8/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 目前版本 |
+| v0.7 | `v0.7/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 前一版 |
+| v0.6 | `v0.6/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 舊版 |
 | v0.5 | `v0.5/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 舊版 |
 
 ## 給同事下載安裝
@@ -18,8 +19,8 @@ QtoWirePlugin 是 AutoCAD 2023 使用的弱電 QTO 外掛，用於弱電設計�
 
 請到 GitHub Releases 下載：
 
-- [QtoWirePlugin v0.7 Release](https://github.com/NicheSam/QtoWirePlugin/releases/tag/v0.7)
-- [QtoWirePlugin_v0.7_installer.zip](https://github.com/NicheSam/QtoWirePlugin/releases/download/v0.7/QtoWirePlugin_v0.7_installer.zip)
+- [QtoWirePlugin v0.8.2 Release](https://github.com/NicheSam/QtoWirePlugin/releases/tag/v0.8.2)
+- [QtoWirePlugin_v0.8.2_installer.zip](https://github.com/NicheSam/QtoWirePlugin/releases/download/v0.8.2/QtoWirePlugin_v0.8.2_installer.zip)
 
 下載後解壓縮，先完全關閉 AutoCAD，再執行：
 
@@ -27,34 +28,37 @@ QtoWirePlugin 是 AutoCAD 2023 使用的弱電 QTO 外掛，用於弱電設計�
 安裝或更新_QtoWirePlugin.bat
 ```
 
-## v0.7 主要新增
+## v0.8.2 主要新增
 
-- `更新預算 Excel`：依 CAD 現況更新 Excel 數量，保留 Excel 內人工填寫的單價、備註、確認狀態。
-- `同步主控`：集中處理 Excel 路徑、更新、檢查、修復與同步紀錄。
-- `預算草稿`：接近預算整理的工作表，不再只輸出物件級資料。
-- `數量統整`：彙整樓層、系統、設備、線材等數量。
-- `樓層框 / 系統框`：用聚合線範圍快速覆蓋有 QTO 資訊物件的樓層或系統代碼。
-- `Review / 修復`：檢查缺系統、缺設備類型、缺樓層、缺同步 ID 等問題。
-- Ribbon 面板整理，保留常用的標記、編輯、刪除、指向箱體、編號標註、報表與同步功能。
+- `啟用自動同步`：先建立並開啟 Excel；後續相關 QTO 物件變更會在 CAD 指令結束後自動更新，不需每次手動重整。
+- `預算表設定`：可調整弱電、停管、資訊、TV、CCTV、BA、視聽音響、緊急廣播的上下順序與顯示狀態，也可控制工程分類與人員欄位。
+- Excel 分成 `預算草稿`、`數量統整`、`檢查清單`、隱藏的 `CAD原始資料` 與 `QTO_SYNC_DATA`。
+- 隱藏系統、零數量項目或欄位只會隱藏 Excel 列／欄，不會刪除原始資料或人工單價、廠牌、備註。
+- `立即重整 Excel` 降為故障復原與強制重套版面的備援操作。
+- 更新既有 Excel 時保留其他人工工作表；若無法安全保留，外掛會停止操作，不整本覆寫。
+- 新增標準圖塊資料庫管理、圖案預覽、依原點／圖形中心插入與插入後自動寫入 QTO XData。
+- 保留 v0.7 的樓層框、系統框、Review、修復、屬性面板、報表與 CSV 功能。
 
 ## 專案結構
 
 ```text
 QtoWirePlugin/
   README.md
-  v0.7/
+  v0.8/
     QtoWirePlugin.csproj
     Commands.cs
     QtoSyncMainPalette.cs
     QtoExcelWorkbookBuilder.cs
     QtoExcelComWorkbookBridge.cs
-    QtoScopeService.cs
-    QtoReviewForm.cs
-    QtoWirePlugin_v0.7.bundle/
+    QtoBudgetLayoutSettings.cs
+    QtoBlockCatalogManagerForm.cs
+    QtoWirePlugin_v0.8.bundle/
       PackageContents.xml
       m2_m4_shared_dictionary/
-  v0.6/
+  v0.7/
     前一版原始碼
+  v0.6/
+    舊版原始碼
   v0.5/
     舊版原始碼
 ```
@@ -79,4 +83,4 @@ QtoWirePlugin/
 
 ## English Summary
 
-QtoWirePlugin is an AutoCAD 2023 .NET plug-in for weak-current CAD quantity takeoff. It stores QTO information in AutoCAD XData, provides property editing, review tools, scope-based floor/system assignment, and Excel/CSV outputs for budget preparation.
+QtoWirePlugin is an AutoCAD 2023 .NET plug-in for weak-current CAD quantity takeoff. It stores QTO information in AutoCAD XData and provides property editing, review tools, scope-based floor/system assignment, a standard block catalog, and event-driven CAD-to-Excel budget draft synchronization.

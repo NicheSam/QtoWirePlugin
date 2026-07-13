@@ -1,0 +1,23 @@
+cad_mapping_id,equipment_type_code,cad_block_hint,layer_hint,attribute_hint,source_basis,mapping_status,blocks_m2,blocks_m4,review_reason
+CADMAP-001,PARK_LPR_CAMERA,車牌辨識攝影機;LPR_CAMERA;CAM-LPR,E-停管;ELV-PARK;T-PARK,車道;方向;設備編號,由標單高頻停車品項反推,candidate,false,false,需由圖例或 CAD 標準確認實際 block name
+CADMAP-002,PARK_TICKET_MACHINE,入口出票機;出口驗票機;PARK_TICKET,E-停管;ELV-PARK;T-PARK,入口出口;設備編號,由標單高頻停車品項反推,candidate,false,false,需確認入口與出口設備是否共用圖塊
+CADMAP-003,PARK_PAYMENT_MACHINE,全自動繳費機;PAY_STATION,E-停管;ELV-PARK;T-PARK,設備編號;支付介面,由標單高頻停車品項反推,candidate,false,false,需確認是否有落地式與壁掛式差異
+CADMAP-004,PARK_LOOP_DETECTOR,感應線圈;LOOP_DETECTOR,E-停管;ELV-PARK;T-PARK,車道;迴路編號,由標單高頻停車品項反推,candidate,false,false,需確認線圈在 CAD 中是否以 polyline 或 block 表示
+CADMAP-005,PARK_SIGN_DISPLAY,車位計數盤;資訊顯示器;PARK_DISPLAY,E-停管;ELV-PARK;T-PARK,顯示內容;設備編號,由標單高頻停車品項反推,candidate,false,false,需確認顯示器尺寸與安裝型式
+CADMAP-006,ACS_CARD_READER,讀卡機;CARD_READER;CR,E-門禁;ELV-ACS;T-ACS,門號;設備編號,由門禁標單品項反推,candidate,false,false,需確認讀卡機、出票機讀卡與停車讀卡是否分流
+CADMAP-007,ACS_CONTROLLER,門禁控制器;ACCESS_CONTROLLER;ACU,E-門禁;ELV-ACS;T-ACS,控制門數;箱體編號,由門禁與停車控制品項反推,candidate,false,false,需確認控制器與 IO 模組是否同圖塊
+CADMAP-008,CCTV_CAMERA,監視攝影機;CCTV_CAMERA;CAM,E-監視;ELV-CCTV;T-CCTV,鏡頭型式;設備編號,由 CCTV / 攝影機品項反推,candidate,false,false,需確認一般 CCTV 與車牌辨識攝影機是否分開
+CADMAP-009,CCTV_VMS_NVR,NVR;VMS;影像管理主機,E-監視;ELV-CCTV;T-CCTV,通道數;主機編號,由影像處理軟體與主機品項反推,candidate,false,false,多數可能在系統圖或設備表，不一定有平面 block
+CADMAP-010,BMS_WORKSTATION,中央監控主機;BMS_WORKSTATION;BMS_PC,E-監控;ELV-BMS;T-BMS,主機編號;系統範圍,由中央監視主控制設備品項反推,candidate,false,false,可能只出現在系統架構圖或設備表
+CADMAP-011,BMS_CONTROLLER_IO,控制器;IO控制模組;DDC;PLC,E-監控;ELV-BMS;T-BMS,控制箱;點數,由控制器與 IO 模組品項反推,candidate,false,false,需對 I/O 點表確認
+CADMAP-012,EMS_POWER_METER,多功能電錶;POWER_METER;PM,E-電力;E-EMS;ELV-EMS,盤別;迴路;通訊位址,由電力監視品項反推,candidate,false,false,需確認是否由強電圖塊表示
+CADMAP-013,EMS_DEMAND_CONTROL,需量控制主機;DEMAND_CONTROL,E-電力;E-EMS;ELV-EMS,主機編號;控制迴路,由需量控制品項反推,candidate,false,false,多數可能在系統圖或設備表
+CADMAP-014,LAN_SWITCH,網路交換器;SWITCH;HUB,E-弱電;ELV-LAN;T-LAN,埠數;機櫃編號,由網路交換器與 HUB 品項反推,candidate,false,false,需確認是否以機櫃設備表表示
+CADMAP-015,LAN_FIBER_CONVERTER,光纖轉換器;FIBER_CONVERTER,E-弱電;ELV-LAN;T-LAN,光纖芯數;端點,由光纖轉換器與熔接品項反推,candidate,false,false,需確認端點與光纖路徑
+CADMAP-016,ELV_CONDUIT,弱電配管;CONDUIT;PIPE,E-管線;ELV-CONDUIT,管徑;材質;路徑,由配管高頻品項反推,candidate,false,false,CAD 可能以線段或圖層表示而非 block
+CADMAP-017,ELV_CABLE,弱電配線;CABLE;WIRE,E-配線;ELV-WIRE,線種;芯數;路徑,由配線高頻品項反推,candidate,false,false,CAD 可能以線段或圖層表示而非 block
+CADMAP-018,TEST_INSTALL,無固定圖塊,無固定圖層,,由安裝測試工資品項反推,blocked,true,false,工資類通常不對應 CAD 圖塊
+CADMAP-019,TEST_TRAINING_DOC,無固定圖塊,無固定圖層,,由教育訓練與文件費品項反推,blocked,true,false,文件與訓練類通常不對應 CAD 圖塊
+CADMAP-020,UNKNOWN_EQUIPMENT,LIGHT_FIXTURE,E-LIGHT,{},來自 mep_handover_mvp mapping_rules.json 範例,blocked,true,true,照明圖塊不在本版弱電試點範圍，需人工決定是否新增照明設備類型
+CADMAP-021,PA_SPEAKER,CEILING_SPEAKER,T-SPEAKER,{},來自 mep_handover_mvp mapping_rules.json 範例,candidate,false,false,保留既有格式示範，需人工確認是否為正式廣播喇叭圖塊
+CADMAP-022,UNKNOWN_EQUIPMENT,A$C00656D10,E-燈具,{},來自 mep_handover_mvp mapping_rules.json 範例,blocked,true,true,匿名圖塊名稱無法判斷設備類型，需人工對圖例確認
