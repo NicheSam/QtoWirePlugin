@@ -8,8 +8,9 @@ QtoWirePlugin 是 AutoCAD 2023 使用的弱電 QTO 外掛，用於弱電設計�
 
 | 版本 | 資料夾 | 目標環境 | 狀態 |
 | --- | --- | --- | --- |
-| v0.8.2 | `v0.8/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 目前版本 |
-| v0.7 | `v0.7/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 前一版 |
+| v1.0.0-beta | `v1.0/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 目前預發行版 |
+| v0.8.2 | `v0.8/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 前一版 |
+| v0.7 | `v0.7/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 舊版 |
 | v0.6 | `v0.6/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 舊版 |
 | v0.5 | `v0.5/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 舊版 |
 
@@ -19,42 +20,46 @@ QtoWirePlugin 是 AutoCAD 2023 使用的弱電 QTO 外掛，用於弱電設計�
 
 請到 GitHub Releases 下載：
 
-- [QtoWirePlugin v0.8.2 Release](https://github.com/NicheSam/QtoWirePlugin/releases/tag/v0.8.2)
-- [QtoWirePlugin_v0.8.2_installer.zip](https://github.com/NicheSam/QtoWirePlugin/releases/download/v0.8.2/QtoWirePlugin_v0.8.2_installer.zip)
+- [QtoWirePlugin v1.0.0-beta Release](https://github.com/NicheSam/QtoWirePlugin/releases/tag/v1.0.0-beta)
+- [QtoWirePlugin_v1.0.0-beta_installer.zip](https://github.com/NicheSam/QtoWirePlugin/releases/download/v1.0.0-beta/QtoWirePlugin_v1.0.0-beta_installer.zip)
 
 下載後解壓縮，先完全關閉 AutoCAD，再執行：
 
 ```text
-安裝或更新_QtoWirePlugin.bat
+install_or_update_QtoWirePlugin.bat
 ```
 
-## v0.8.2 主要新增
+安裝後可執行 `run_plugin_self_test.bat`，確認 AutoCAD Core、外掛 DLL 與主要 QTO 規則是否正常。
 
-- `啟用自動同步`：先建立並開啟 Excel；後續相關 QTO 物件變更會在 CAD 指令結束後自動更新，不需每次手動重整。
-- `預算表設定`：可調整弱電、停管、資訊、TV、CCTV、BA、視聽音響、緊急廣播的上下順序與顯示狀態，也可控制工程分類與人員欄位。
-- Excel 分成 `預算草稿`、`數量統整`、`檢查清單`、隱藏的 `CAD原始資料` 與 `QTO_SYNC_DATA`。
-- 隱藏系統、零數量項目或欄位只會隱藏 Excel 列／欄，不會刪除原始資料或人工單價、廠牌、備註。
-- `立即重整 Excel` 降為故障復原與強制重套版面的備援操作。
-- 更新既有 Excel 時保留其他人工工作表；若無法安全保留，外掛會停止操作，不整本覆寫。
-- 新增標準圖塊資料庫管理、圖案預覽、依原點／圖形中心插入與插入後自動寫入 QTO XData。
-- 保留 v0.7 的樓層框、系統框、Review、修復、屬性面板、報表與 CSV 功能。
+## v1.0.0 Beta 主要新增
+
+- 匯入既有預算 Excel，保留原始工作表並建立穩定預算階層主檔。
+- 支援一個 CAD 計量群組對應多個預算明細，未確認 mapping 不納入正式合計。
+- 新增公司預算規則庫與案件預算綁定；公司規則不會因案件確認而自動污染。
+- `預算草稿` 由 CAD 更新數量，同時保留 Excel 人工單價、成本、廠牌、備註與確認狀態。
+- 新增標準圖塊差異分析與批次更新，保留實例位置、屬性與 QTO XData。
+- 新增連續放置設備、QTO 線管繪製、舊物件轉換與樓層／系統範圍管理。
+- 檢查清單改為中文篩選、多選定位、屬性檢視與選取項目修復。
+- Excel 新增 `系統摘要`；技術原始資料與同步資料維持隱藏。
+- 內附自我測試，可檢查主要規則、關聯資料與 2,000 筆合成資料效能。
+
+本版為預發行版。合成測試與範例預算驗證已通過，但正式 `v1.0.0` 前仍需要真實案件與第二台電腦完成使用驗收。
 
 ## 專案結構
 
 ```text
 QtoWirePlugin/
   README.md
-  v0.8/
+  v1.0/
     QtoWirePlugin.csproj
-    Commands.cs
-    QtoSyncMainPalette.cs
-    QtoExcelWorkbookBuilder.cs
-    QtoExcelComWorkbookBridge.cs
-    QtoBudgetLayoutSettings.cs
-    QtoBlockCatalogManagerForm.cs
-    QtoWirePlugin_v0.8.bundle/
-      PackageContents.xml
-      m2_m4_shared_dictionary/
+    QtoBudgetMappingForm.cs
+    QtoBlockUpdateForm.cs
+    QtoReviewForm.cs
+    docs/
+    tools/
+    QtoWirePlugin_v1.0.bundle/
+  v0.8/
+    前一版原始碼
   v0.7/
     前一版原始碼
   v0.6/
@@ -63,7 +68,7 @@ QtoWirePlugin/
     舊版原始碼
 ```
 
-`bin/`、`obj/`、`release/`、DLL、PDB、installer ZIP 不放入 repo。正式安裝包只放在 GitHub Releases。
+`bin/`、`obj/`、`release/`、DLL、PDB、installer ZIP 不放入 repo。可安裝 ZIP 只放在 GitHub Releases。
 
 ## 建置需求
 
@@ -83,4 +88,4 @@ QtoWirePlugin/
 
 ## English Summary
 
-QtoWirePlugin is an AutoCAD 2023 .NET plug-in for weak-current CAD quantity takeoff. It stores QTO information in AutoCAD XData and provides property editing, review tools, scope-based floor/system assignment, a standard block catalog, and event-driven CAD-to-Excel budget draft synchronization.
+QtoWirePlugin is an AutoCAD 2023 .NET plug-in for weak-current CAD quantity takeoff. The v1.0.0 beta adds budget hierarchy import, controlled one-to-many budget mapping, company mapping profiles, standard block updates, drawing tools, review workflows, and event-driven CAD-to-Excel budget draft synchronization.

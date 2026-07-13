@@ -1,0 +1,9 @@
+system_code,system_name,domain,scope_note,m2_relevance,m4_relevance,review_note
+弱電,弱電,weak_current,弱電共通設備、管線與尚未細分至專業子系統的項目,true,true,需確認是否應歸入更明確的系統分類
+停管,停管,weak_current,停車收費、車牌辨識、車位偵測、停車誘導與停管管線,true,true,需區分設備本體、管線、軟體與工資
+資訊,資訊,weak_current,資訊網路、電話、光纖、交換器、通訊基礎與資訊插座,true,true,需確認網路邊界、PoE、管理權限與備援
+TV,TV,weak_current,共同天線、數位電視、幹線分配與電視插座,true,true,需確認訊號來源、分配方式與端點範圍
+CCTV,CCTV,weak_current,攝影機、錄影、影像管理、影像連動與遠端監看,true,true,需確認保存天數、鏡頭型式與隱私遮蔽
+BA,BA,weak_current,中央監控、建築自動化、能源管理、環境監測與跨系統整合,true,true,需確認監視或控制、整合介面與點數
+視聽音響,視聽音響,weak_current,會議視聽、一般音響、顯示、擴音與控制設備,true,true,需確認空間需求、訊號介面與控制範圍
+緊急廣播,緊急廣播,weak_current,消防緊急廣播、分區、喇叭、擴大機與消防連動,true,true,需確認消防責任界面、分區與連動邏輯

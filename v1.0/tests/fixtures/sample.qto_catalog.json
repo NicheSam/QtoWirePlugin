@@ -1,0 +1,40 @@
+{
+  "SchemaVersion": "0.1",
+  "SourceLegendDwg": "",
+  "Items": [
+    {
+      "CatalogId": "sample-lan-outlet",
+      "BlockName": "SAMPLE_LAN_OUTLET",
+      "DisplayName": "資訊插座",
+      "SystemCode": "LAN",
+      "EquipmentTypeCode": "LAN_OUTLET",
+      "QtoType": "OUTLET",
+      "QuantityBasis": "point_count",
+      "Unit": "點",
+      "Status": "active",
+      "Version": "1",
+      "DefaultLayer": "QTO_LAN",
+      "BudgetItemKey": "LAN_OUTLET"
+    },
+    {
+      "CatalogId": "sample-unconfigured",
+      "BlockName": "SAMPLE_PENDING_DEVICE",
+      "DisplayName": "待設定設備",
+      "Status": "unconfigured",
+      "Version": "1"
+    },
+    {
+      "CatalogId": "sample-old-camera",
+      "BlockName": "SAMPLE_OLD_CAMERA",
+      "DisplayName": "舊型攝影機",
+      "SystemCode": "CCTV",
+      "EquipmentTypeCode": "CCTV_CAMERA",
+      "QtoType": "DEVICE",
+      "QuantityBasis": "point_count",
+      "Unit": "台",
+      "Status": "deprecated",
+      "Version": "1"
+    }
+  ],
+  "Messages": []
+}

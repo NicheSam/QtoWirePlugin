@@ -9,7 +9,9 @@ release/
 *.suo
 *.log
 *.tmp
+*.bak
+acad.err
+tests/fixtures/qto_installed_beta_report.txt
 
 .vs/
 .idea/
-
