@@ -26,6 +26,7 @@ namespace QtoWirePlugin
             previewTimer.Tick += delegate { previewTimer.Stop(); ShowDetail(); };
             Text = "更新專案圖塊";
             Width = 1120; Height = 700; MinimumSize = new System.Drawing.Size(900, 560); StartPosition = FormStartPosition.CenterScreen;
+            QtoUiTheme.ApplyForm(this);
             candidates = new BindingList<QtoBlockUpdateCandidate>(service.Analyze(database, catalog).ToList());
             grid = new DataGridView
             {
@@ -33,6 +34,7 @@ namespace QtoWirePlugin
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect, MultiSelect = true, RowHeadersVisible = false,
                 BackgroundColor = System.Drawing.SystemColors.Window
             };
+            QtoUiTheme.ApplyGrid(grid);
             grid.Columns.Add(new DataGridViewCheckBoxColumn { DataPropertyName = "Selected", HeaderText = "更新", Width = 50 });
             grid.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "DisplayName", HeaderText = "顯示名稱", Width = 180, ReadOnly = true });
             grid.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BlockName", HeaderText = "圖塊名稱", Width = 160, ReadOnly = true });
@@ -50,14 +52,20 @@ namespace QtoWirePlugin
             previews.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             previews.Controls.Add(WrapPreview("專案目前圖塊", currentPreview), 0, 0);
             previews.Controls.Add(WrapPreview("公司標準圖塊", standardPreview), 1, 0);
-            FlowLayoutPanel buttons = new FlowLayoutPanel { Dock = DockStyle.Bottom, Height = 48, FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft, Padding = new Padding(8) };
-            Button apply = new Button { Text = "更新勾選圖塊", Width = 140, Height = 30 };
-            Button cancel = new Button { Text = "關閉", Width = 90, Height = 30, DialogResult = DialogResult.Cancel };
-            Button selectUpdates = new Button { Text = "勾選所有可更新", Width = 140, Height = 30 };
-            apply.Click += ApplyUpdates;
+            FlowLayoutPanel buttons = new FlowLayoutPanel { Dock = DockStyle.Bottom, Height = 52, FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft, Padding = new Padding(8), AutoScroll = true };
+            Button apply = QtoUiTheme.CreateButton("更新勾選圖塊", ApplyUpdates, QtoButtonRole.Primary);
+            apply.Width = 140;
+            Button cancel = QtoUiTheme.CreateButton("關閉", null, QtoButtonRole.Secondary);
+            cancel.Width = 90;
+            cancel.DialogResult = DialogResult.Cancel;
+            Button selectUpdates = QtoUiTheme.CreateButton("勾選所有可更新", null, QtoButtonRole.Default);
+            selectUpdates.Width = 140;
             selectUpdates.Click += delegate { foreach (QtoBlockUpdateCandidate item in candidates) item.Selected = item.CanUpdate; grid.Refresh(); };
             buttons.Controls.Add(cancel); buttons.Controls.Add(apply); buttons.Controls.Add(selectUpdates);
-            Controls.Add(grid); Controls.Add(previews); Controls.Add(detail); Controls.Add(buttons);
+            Panel header = new Panel { Dock = DockStyle.Top, Height = 64, Padding = new Padding(12, 8, 12, 4) };
+            header.Controls.Add(new Label { Text = "更新專案圖塊", Dock = DockStyle.Top, Height = 30, Font = QtoUiTheme.HeaderFont, ForeColor = QtoUiTheme.TextColor });
+            header.Controls.Add(new Label { Text = candidates.Count == 0 ? "目前沒有可檢查的專案圖塊。" : "先比較專案與標準圖塊，再勾選要更新的項目。更新前不會修改圖面。", Dock = DockStyle.Bottom, Height = 24, ForeColor = QtoUiTheme.MutedTextColor });
+            Controls.Add(grid); Controls.Add(previews); Controls.Add(detail); Controls.Add(buttons); Controls.Add(header);
             SchedulePreview();
         }
 

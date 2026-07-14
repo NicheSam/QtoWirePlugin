@@ -133,6 +133,14 @@ namespace QtoWirePlugin
                 return "圖塊更新後需確認";
             }
 
+            if (string.Equals(issueType, QtoReviewIssueType.BudgetUnmappedCadSource, StringComparison.OrdinalIgnoreCase)) return "CAD 計量尚未對應預算";
+            if (string.Equals(issueType, QtoReviewIssueType.BudgetPendingMapping, StringComparison.OrdinalIgnoreCase)) return "預算對應待確認";
+            if (string.Equals(issueType, QtoReviewIssueType.BudgetBlockedMapping, StringComparison.OrdinalIgnoreCase)) return "預算對應已阻擋";
+            if (string.Equals(issueType, QtoReviewIssueType.BudgetWithoutCadSource, StringComparison.OrdinalIgnoreCase)) return "預算品項沒有 CAD 來源";
+            if (string.Equals(issueType, QtoReviewIssueType.BudgetInvalidTarget, StringComparison.OrdinalIgnoreCase)) return "預算對應目標失效";
+            if (string.Equals(issueType, QtoReviewIssueType.BudgetUnitConflict, StringComparison.OrdinalIgnoreCase)) return "預算計量單位衝突";
+            if (string.Equals(issueType, QtoReviewIssueType.BudgetDuplicateMapping, StringComparison.OrdinalIgnoreCase)) return "預算對應規則重複";
+
             return string.IsNullOrWhiteSpace(issueType) ? "未分類問題" : issueType;
         }
 
@@ -181,6 +189,19 @@ namespace QtoWirePlugin
                 || string.Equals(categoryOrIssueType, QtoReviewIssueType.ExcelRowMissingCadObject, StringComparison.OrdinalIgnoreCase))
             {
                 return "同步差異";
+            }
+
+            if (string.Equals(categoryOrIssueType, "budget", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(categoryOrIssueType, "預算完整性", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(categoryOrIssueType, QtoReviewIssueType.BudgetUnmappedCadSource, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(categoryOrIssueType, QtoReviewIssueType.BudgetPendingMapping, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(categoryOrIssueType, QtoReviewIssueType.BudgetBlockedMapping, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(categoryOrIssueType, QtoReviewIssueType.BudgetWithoutCadSource, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(categoryOrIssueType, QtoReviewIssueType.BudgetInvalidTarget, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(categoryOrIssueType, QtoReviewIssueType.BudgetUnitConflict, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(categoryOrIssueType, QtoReviewIssueType.BudgetDuplicateMapping, StringComparison.OrdinalIgnoreCase))
+            {
+                return "預算完整性";
             }
 
             return string.IsNullOrWhiteSpace(categoryOrIssueType) ? "未分類" : categoryOrIssueType;

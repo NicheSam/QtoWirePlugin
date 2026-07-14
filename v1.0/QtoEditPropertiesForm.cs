@@ -24,6 +24,7 @@ namespace QtoWirePlugin
             MaximizeBox = false;
             MinimizeBox = false;
             ClientSize = new Size(500, editOutlet ? 330 : 250);
+            QtoUiTheme.ApplyForm(this);
 
             Label titleLabel = new Label();
             titleLabel.Text = title;
@@ -48,43 +49,45 @@ namespace QtoWirePlugin
 
             if (editOutlet)
             {
-                outletIdCheckBox = CreateCheckBox("出線口編號 OUTLET_ID", 22, y, false);
+                outletIdCheckBox = CreateCheckBox("出線口編號", 22, y, false);
                 outletIdTextBox = CreateTextBox(210, y - 2, GetDefault(defaultValues, QtoXDataHelper.KeyOutletId));
+                BindEnabledState(outletIdCheckBox, outletIdTextBox);
                 Controls.Add(outletIdCheckBox);
                 Controls.Add(outletIdTextBox);
                 y += 42;
             }
 
-            jbIdCheckBox = CreateCheckBox("箱體編號 JB_ID", 22, y, false);
+            jbIdCheckBox = CreateCheckBox("箱體編號", 22, y, false);
             jbIdTextBox = CreateTextBox(210, y - 2, GetDefault(defaultValues, QtoXDataHelper.KeyJbId));
+            BindEnabledState(jbIdCheckBox, jbIdTextBox);
             Controls.Add(jbIdCheckBox);
             Controls.Add(jbIdTextBox);
             y += 42;
 
-            systemCheckBox = CreateCheckBox("系統 SYSTEM", 22, y, true);
+            systemCheckBox = CreateCheckBox("系統代碼", 22, y, true);
             systemTextBox = CreateTextBox(210, y - 2, GetDefaultOrFallback(defaultValues, QtoXDataHelper.KeySystem, "DATA"));
+            BindEnabledState(systemCheckBox, systemTextBox);
             Controls.Add(systemCheckBox);
             Controls.Add(systemTextBox);
             y += 42;
 
             if (editOutlet)
             {
-                cableTypeCheckBox = CreateCheckBox("線材類型 CABLE_TYPE", 22, y, true);
+                cableTypeCheckBox = CreateCheckBox("線材類型", 22, y, true);
                 cableTypeTextBox = CreateTextBox(210, y - 2, GetDefaultOrFallback(defaultValues, QtoXDataHelper.KeyCableType, "Cat6"));
+                BindEnabledState(cableTypeCheckBox, cableTypeTextBox);
                 Controls.Add(cableTypeCheckBox);
                 Controls.Add(cableTypeTextBox);
                 y += 42;
             }
 
-            Button okButton = new Button();
-            okButton.Text = "套用";
+            Button okButton = QtoUiTheme.CreateButton("套用選取欄位", null, QtoButtonRole.Primary);
             okButton.DialogResult = DialogResult.OK;
-            okButton.Location = new Point(300, ClientSize.Height - 48);
-            okButton.Size = new Size(82, 30);
+            okButton.Location = new Point(270, ClientSize.Height - 48);
+            okButton.Size = new Size(112, 30);
             Controls.Add(okButton);
 
-            Button cancelButton = new Button();
-            cancelButton.Text = "取消";
+            Button cancelButton = QtoUiTheme.CreateButton("取消", null, QtoButtonRole.Secondary);
             cancelButton.DialogResult = DialogResult.Cancel;
             cancelButton.Location = new Point(394, ClientSize.Height - 48);
             cancelButton.Size = new Size(82, 30);
@@ -92,6 +95,12 @@ namespace QtoWirePlugin
 
             AcceptButton = okButton;
             CancelButton = cancelButton;
+        }
+
+        private static void BindEnabledState(CheckBox checkBox, TextBox textBox)
+        {
+            textBox.Enabled = checkBox.Checked;
+            checkBox.CheckedChanged += delegate { textBox.Enabled = checkBox.Checked; };
         }
 
         public bool UpdateOutletId

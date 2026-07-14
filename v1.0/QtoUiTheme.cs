@@ -50,6 +50,7 @@ namespace QtoWirePlugin
                 return;
             }
 
+            form.AutoScaleMode = AutoScaleMode.Dpi;
             form.BackColor = WindowBackColor;
             form.Font = BaseFont;
         }

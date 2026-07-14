@@ -37,6 +37,13 @@ namespace QtoWirePlugin
         public const string CadObjectMissingInExcel = "CadObjectMissingInExcel";
         public const string ExcelRowMissingCadObject = "ExcelRowMissingCadObject";
         public const string BlockUpdateNeedsReview = "BlockUpdateNeedsReview";
+        public const string BudgetUnmappedCadSource = "BudgetUnmappedCadSource";
+        public const string BudgetPendingMapping = "BudgetPendingMapping";
+        public const string BudgetBlockedMapping = "BudgetBlockedMapping";
+        public const string BudgetWithoutCadSource = "BudgetWithoutCadSource";
+        public const string BudgetInvalidTarget = "BudgetInvalidTarget";
+        public const string BudgetUnitConflict = "BudgetUnitConflict";
+        public const string BudgetDuplicateMapping = "BudgetDuplicateMapping";
     }
 
     public static class QtoCatalogItemStatus

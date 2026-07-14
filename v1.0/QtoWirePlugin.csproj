@@ -101,6 +101,9 @@
     <Compile Include="QtoBudgetLayoutSettings.cs" />
     <Compile Include="QtoBudgetLayoutSettingsForm.cs" />
     <Compile Include="QtoBudgetMappingModels.cs" />
+    <Compile Include="QtoBudgetCompletenessModels.cs" />
+    <Compile Include="QtoBudgetCompletenessService.cs" />
+    <Compile Include="QtoBudgetCompletenessForm.cs" />
     <Compile Include="QtoCompanyBudgetProfileModels.cs" />
     <Compile Include="QtoCompanyBudgetProfileStore.cs" />
     <Compile Include="QtoCompanyBudgetProfileForm.cs" />
@@ -131,6 +134,8 @@
     <Compile Include="QtoPropertyPaletteHost.cs" />
     <Compile Include="QtoPropertyPanelForm.cs" />
     <Compile Include="QtoProjectCatalogContext.cs" />
+    <Compile Include="QtoProjectSetupForm.cs" />
+    <Compile Include="QtoProjectWorkflowCommands.cs" />
     <Compile Include="QtoRepairForm.cs" />
     <Compile Include="QtoReviewForm.cs" />
     <Compile Include="QtoRibbon.cs" />

@@ -136,7 +136,7 @@ namespace QtoWirePlugin
             severityFilter.SelectedIndexChanged += FilterChanged;
             panel.Controls.Add(severityFilter, 1, 0);
             panel.Controls.Add(CreateLabel("類型"), 2, 0);
-            categoryFilter = CreateCombo(new string[] { "全部", "欄位缺漏", "圖塊資料庫", "同步 ID", "數量異常", "同步差異" });
+            categoryFilter = CreateCombo(new string[] { "全部", "欄位缺漏", "圖塊資料庫", "同步 ID", "數量異常", "同步差異", "預算完整性" });
             categoryFilter.SelectedIndexChanged += FilterChanged;
             panel.Controls.Add(categoryFilter, 3, 0);
             panel.Controls.Add(CreateLabel("狀態"), 4, 0);

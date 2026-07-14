@@ -123,52 +123,66 @@ namespace QtoWirePlugin
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
-            Width = 560;
-            Height = 330;
+            Width = 620;
+            Height = 390;
+            MinimumSize = new Size(520, 340);
+            QtoUiTheme.ApplyForm(this);
 
-            Label titleLabel = new Label();
-            titleLabel.Text = "選擇要比對的 QTO 資訊";
-            titleLabel.Font = new Font(SystemFonts.MessageBoxFont.FontFamily, 11.0f, FontStyle.Bold);
-            titleLabel.Location = new Point(18, 16);
-            titleLabel.AutoSize = true;
-            Controls.Add(titleLabel);
+            TableLayoutPanel root = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = QtoUiTheme.FormPadding, ColumnCount = 1, RowCount = 3 };
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 64));
+            root.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 48));
+            Panel header = new Panel { Dock = DockStyle.Fill };
+            header.Controls.Add(new Label { Text = "選取相同 QTO", Dock = DockStyle.Top, Height = 30, Font = QtoUiTheme.HeaderFont, ForeColor = QtoUiTheme.TextColor });
+            header.Controls.Add(new Label { Text = "勾選要比對的欄位。未勾選的欄位不參與篩選。", Dock = DockStyle.Bottom, Height = 26, ForeColor = QtoUiTheme.MutedTextColor });
+            root.Controls.Add(header, 0, 0);
 
-            Label hintLabel = new Label();
-            hintLabel.Text = "勾選條件並指定值，按確定後會選取模型空間中相同資訊的圖塊與線段。";
-            hintLabel.Location = new Point(20, 44);
-            hintLabel.AutoSize = true;
-            Controls.Add(hintLabel);
+            TableLayoutPanel conditions = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 4, BackColor = QtoUiTheme.PanelBackColor, Padding = new Padding(10) };
+            conditions.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 132));
+            conditions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            for (int i = 0; i < 4; i++) conditions.RowStyles.Add(new RowStyle(SizeType.Percent, 25));
 
-            equipmentTypeCheckBox = CreateCheckBox("設備類型", 22, 82);
-            equipmentTypeComboBox = CreateComboBox(142, 78, GetEquipmentTypeDisplays(dictionary));
-            qtoTypeCheckBox = CreateCheckBox("CAD計量型態", 22, 120);
-            qtoTypeComboBox = CreateComboBox(142, 116, GetQtoTypeDisplays());
-            systemCodeCheckBox = CreateCheckBox("系統代碼", 22, 158);
-            systemCodeComboBox = CreateComboBox(142, 154, GetSystemCodes(dictionary));
-            cableTypeCheckBox = CreateCheckBox("線材類型", 22, 196);
-            cableTypeComboBox = CreateComboBox(142, 192, ToArray(cableTypes));
+            equipmentTypeCheckBox = CreateCheckBox("設備類型", 0, 0);
+            equipmentTypeComboBox = CreateComboBox(0, 0, GetEquipmentTypeDisplays(dictionary));
+            qtoTypeCheckBox = CreateCheckBox("CAD 計量型態", 0, 0);
+            qtoTypeComboBox = CreateComboBox(0, 0, GetQtoTypeDisplays());
+            systemCodeCheckBox = CreateCheckBox("系統代碼", 0, 0);
+            systemCodeComboBox = CreateComboBox(0, 0, GetSystemCodes(dictionary));
+            cableTypeCheckBox = CreateCheckBox("線材類型", 0, 0);
+            cableTypeComboBox = CreateComboBox(0, 0, ToArray(cableTypes));
 
             SetInitialValue(equipmentTypeCheckBox, equipmentTypeComboBox, ToEquipmentTypeDisplay(sourceOptions.EquipmentTypeCode, dictionary));
             SetInitialValue(qtoTypeCheckBox, qtoTypeComboBox, ToQtoTypeDisplay(sourceOptions.QtoType));
             SetInitialValue(systemCodeCheckBox, systemCodeComboBox, sourceOptions.SystemCode);
             SetInitialValue(cableTypeCheckBox, cableTypeComboBox, sourceOptions.CableType);
 
-            Controls.Add(equipmentTypeCheckBox);
-            Controls.Add(equipmentTypeComboBox);
-            Controls.Add(qtoTypeCheckBox);
-            Controls.Add(qtoTypeComboBox);
-            Controls.Add(systemCodeCheckBox);
-            Controls.Add(systemCodeComboBox);
-            Controls.Add(cableTypeCheckBox);
-            Controls.Add(cableTypeComboBox);
+            AddCondition(conditions, 0, equipmentTypeCheckBox, equipmentTypeComboBox);
+            AddCondition(conditions, 1, qtoTypeCheckBox, qtoTypeComboBox);
+            AddCondition(conditions, 2, systemCodeCheckBox, systemCodeComboBox);
+            AddCondition(conditions, 3, cableTypeCheckBox, cableTypeComboBox);
+            root.Controls.Add(conditions, 0, 1);
 
-            Button okButton = CreateButton("確定", 372, 248, 72, OkButtonClick);
-            Button cancelButton = CreateButton("取消", 452, 248, 72, CancelButtonClick);
+            FlowLayoutPanel buttons = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft, WrapContents = false, Padding = new Padding(0, 8, 0, 0) };
+            Button okButton = QtoUiTheme.CreateButton("選取相同物件", OkButtonClick, QtoButtonRole.Primary);
+            okButton.Width = 128;
+            Button cancelButton = QtoUiTheme.CreateButton("取消", CancelButtonClick, QtoButtonRole.Secondary);
+            cancelButton.Width = 84;
             AcceptButton = okButton;
             CancelButton = cancelButton;
+            buttons.Controls.Add(cancelButton);
+            buttons.Controls.Add(okButton);
+            root.Controls.Add(buttons, 0, 2);
+            Controls.Add(root);
+        }
 
-            Controls.Add(okButton);
-            Controls.Add(cancelButton);
+        private static void AddCondition(TableLayoutPanel panel, int row, CheckBox checkBox, ComboBox comboBox)
+        {
+            checkBox.Dock = DockStyle.Fill;
+            comboBox.Dock = DockStyle.Fill;
+            checkBox.CheckedChanged += delegate { comboBox.Enabled = checkBox.Checked; };
+            comboBox.Enabled = checkBox.Checked;
+            panel.Controls.Add(checkBox, 0, row);
+            panel.Controls.Add(comboBox, 1, row);
         }
 
         public QtoSelectSameOptions Options

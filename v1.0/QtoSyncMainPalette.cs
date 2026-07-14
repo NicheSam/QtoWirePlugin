@@ -61,6 +61,7 @@ namespace QtoWirePlugin
         public QtoSyncMainPalette()
         {
             overview = QtoUiSampleData.CreateDefaultOverview();
+            QtoSyncCommandService.RestoreWorkbookPathForActiveDrawing();
             if (!string.IsNullOrWhiteSpace(QtoSyncCommandService.CurrentExcelPath))
             {
                 overview.ExcelPath = QtoSyncCommandService.CurrentExcelPath;
@@ -186,6 +187,7 @@ namespace QtoWirePlugin
             quickPanel.Padding = new Padding(0, 4, 0, 0);
             quickPanel.WrapContents = false;
             quickPanel.Controls.Add(CreateSmallButton("檢查清單", ReviewButtonClick));
+            quickPanel.Controls.Add(CreateSmallButton("預算完整性", CompletenessButtonClick));
             quickPanel.Controls.Add(CreateSmallButton("同步紀錄", LogButtonClick));
             quickPanel.Controls.Add(CreateSmallButton("預算表設定", SettingsButtonClick));
             bottomPanel.Controls.Add(quickPanel, 0, 0);
@@ -208,7 +210,7 @@ namespace QtoWirePlugin
             if (!string.IsNullOrWhiteSpace(overview.ExcelPath)
                 && !string.Equals(overview.ExcelPath, "尚未選擇", StringComparison.Ordinal))
             {
-                QtoSyncCommandService.CurrentExcelPath = overview.ExcelPath;
+                QtoSyncCommandService.LinkWorkbookToActiveDrawing(overview.ExcelPath);
             }
             RefreshOverview();
         }
@@ -330,7 +332,7 @@ namespace QtoWirePlugin
             if (string.IsNullOrWhiteSpace(overview.ExcelPath)
                 || string.Equals(overview.ExcelPath, "尚未選擇", StringComparison.Ordinal))
             {
-                return "未建立，啟用自動同步時會自動產生";
+                return "尚未連結；請先選擇既有 Excel，或從案件設定明確建立";
             }
 
             return overview.ExcelPath;
@@ -349,7 +351,7 @@ namespace QtoWirePlugin
                 }
 
                 overview.ExcelPath = dialog.FileName;
-                QtoSyncCommandService.CurrentExcelPath = dialog.FileName;
+                QtoSyncCommandService.LinkWorkbookToActiveDrawing(dialog.FileName);
                 overview.ExcelStatus = "已選擇";
                 overview.CurrentStatus = "尚未開始同步";
                 RefreshOverview();
@@ -372,7 +374,7 @@ namespace QtoWirePlugin
             if (!string.IsNullOrWhiteSpace(overview.ExcelPath)
                 && !string.Equals(overview.ExcelPath, "尚未選擇", StringComparison.Ordinal))
             {
-                QtoSyncCommandService.CurrentExcelPath = overview.ExcelPath;
+                QtoSyncCommandService.LinkWorkbookToActiveDrawing(overview.ExcelPath);
             }
 
             QtoCommandResult result = QtoSyncCommandService.StartSync();
@@ -475,6 +477,17 @@ namespace QtoWirePlugin
         {
             QtoValidationResult result = QtoSyncCommandService.LastValidationResult ?? QtoSyncCommandService.ValidateCurrentDrawing();
             QtoDialogService.ShowReview(result.ReviewItems);
+        }
+
+        private void CompletenessButtonClick(object sender, EventArgs e)
+        {
+            Autodesk.AutoCAD.ApplicationServices.Document document = Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument;
+            if (document == null) return;
+            using (QtoBudgetCompletenessForm form = new QtoBudgetCompletenessForm(document.Database, QtoSyncCommandService.BuildCurrentDrawingRows()))
+            {
+                QtoExternalWindowHost.ShowModal(form, FindForm());
+            }
+            RefreshOverview();
         }
 
         private void LogButtonClick(object sender, EventArgs e)

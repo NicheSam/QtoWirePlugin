@@ -14,29 +14,35 @@ namespace QtoWirePlugin
         private readonly DataGridView grid;
         private readonly Label summary;
         private readonly CheckBox dynamicEnabled;
+        private readonly Timer previewTimer;
 
         public QtoScopeManagerForm(Document document)
         {
             this.document = document;
+            previewTimer = new Timer { Interval = 220 };
+            previewTimer.Tick += delegate { previewTimer.Stop(); ShowPreview(); };
             Text = "樓層與系統範圍管理";
             Width = 900;
             Height = 600;
             MinimumSize = new System.Drawing.Size(720, 480);
             StartPosition = FormStartPosition.CenterParent;
-            Font = new System.Drawing.Font("Microsoft JhengHei UI", 9F);
+            QtoUiTheme.ApplyForm(this);
 
-            FlowLayoutPanel actions = new FlowLayoutPanel { Dock = DockStyle.Top, Height = 48, Padding = new Padding(10, 8, 10, 4), WrapContents = false };
-            actions.Controls.Add(ActionButton("重新整理", RefreshRows));
-            actions.Controls.Add(ActionButton("在 CAD 選取", SelectInCad));
-            actions.Controls.Add(ActionButton("檢查影響", PreviewSelected));
-            actions.Controls.Add(ActionButton("套用選取", ApplySelected));
-            actions.Controls.Add(ActionButton("套用全部", ApplyAll));
-            actions.Controls.Add(ActionButton("清除選取框線設定", ClearSelected));
+            Panel header = new Panel { Dock = DockStyle.Top, Height = 66, Padding = new Padding(12, 8, 12, 4) };
+            header.Controls.Add(new Label { Text = "管理樓層框與系統框", Dock = DockStyle.Top, Height = 30, Font = QtoUiTheme.HeaderFont, ForeColor = QtoUiTheme.TextColor });
+            header.Controls.Add(new Label { Text = "選取範圍框後會自動預覽影響；套用只修改已有 QTO 資訊的物件。", Dock = DockStyle.Bottom, Height = 24, ForeColor = QtoUiTheme.MutedTextColor });
+
+            FlowLayoutPanel actions = new FlowLayoutPanel { Dock = DockStyle.Bottom, Height = 54, Padding = new Padding(10, 8, 10, 8), WrapContents = false, AutoScroll = true };
+            actions.Controls.Add(ActionButton("套用選取", ApplySelected, QtoButtonRole.Primary));
+            actions.Controls.Add(ActionButton("套用全部", ApplyAll, QtoButtonRole.Default));
+            actions.Controls.Add(ActionButton("在 CAD 選取", SelectInCad, QtoButtonRole.Default));
+            actions.Controls.Add(ActionButton("重新整理", RefreshRows, QtoButtonRole.Secondary));
+            actions.Controls.Add(ActionButton("清除所選框線設定", ClearSelected, QtoButtonRole.Secondary));
             dynamicEnabled = new CheckBox { Text = "動態套用", AutoSize = true, Checked = QtoScopeService.DynamicEnabled, Padding = new Padding(12, 5, 0, 0) };
             dynamicEnabled.CheckedChanged += ToggleDynamic;
             actions.Controls.Add(dynamicEnabled);
 
-            summary = new Label { Dock = DockStyle.Bottom, Height = 72, Padding = new Padding(12, 8, 12, 8), AutoEllipsis = true };
+            summary = new Label { Dock = DockStyle.Bottom, Height = 46, Padding = new Padding(12, 8, 12, 8), AutoEllipsis = true, ForeColor = QtoUiTheme.MutedTextColor };
             grid = new DataGridView
             {
                 Dock = DockStyle.Fill, ReadOnly = true, AllowUserToAddRows = false, AllowUserToDeleteRows = false,
@@ -44,16 +50,20 @@ namespace QtoWirePlugin
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect, MultiSelect = true,
                 RowHeadersVisible = false, BackgroundColor = System.Drawing.SystemColors.Window
             };
+            QtoUiTheme.ApplyGrid(grid);
+            grid.SelectionChanged += delegate { SchedulePreview(); };
             Controls.Add(grid);
             Controls.Add(summary);
             Controls.Add(actions);
+            Controls.Add(header);
             LoadRows();
         }
 
-        private static Button ActionButton(string text, EventHandler handler)
+        private static Button ActionButton(string text, EventHandler handler, QtoButtonRole role)
         {
-            Button button = new Button { Text = text, AutoSize = true, Height = 30, Margin = new Padding(0, 0, 8, 0) };
-            button.Click += handler;
+            Button button = QtoUiTheme.CreateButton(text, handler, role);
+            button.AutoSize = true;
+            button.Margin = new Padding(0, 0, 8, 0);
             return button;
         }
 
@@ -89,6 +99,12 @@ namespace QtoWirePlugin
             if (ids.Count == 0) return;
             QtoScopeApplyResult preview = QtoScopeService.ApplySelectedScopes(document.Database, ids, true);
             summary.Text = "已選 " + ids.Count + " 個框｜掃描 QTO " + preview.ScannedQtoCount + "｜預計更新 " + preview.UpdatedCount + "｜預計清空 " + preview.ClearedCount + "｜不變 " + preview.UnchangedCount;
+        }
+
+        private void SchedulePreview()
+        {
+            previewTimer.Stop();
+            previewTimer.Start();
         }
 
         private void PreviewSelected(object sender, EventArgs e)
@@ -131,6 +147,13 @@ namespace QtoWirePlugin
         {
             QtoScopeService.DynamicEnabled = dynamicEnabled.Checked;
             if (dynamicEnabled.Checked) QtoSyncCommandService.StartScopeTracking(); else QtoSyncCommandService.StopScopeTracking();
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            previewTimer.Stop();
+            previewTimer.Dispose();
+            base.OnFormClosed(e);
         }
 
         private static string ToLocalTime(long ticks)

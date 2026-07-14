@@ -15,9 +15,9 @@ if not exist "%MANIFEST%" (
   pause
   exit /b 1
 )
-powershell.exe -NoProfile -Command "$xml=[xml](Get-Content -LiteralPath $env:MANIFEST -Raw); if($xml.ApplicationPackage.AppVersion -ne '1.0.0'){exit 1}"
+powershell.exe -NoProfile -Command "$xml=[xml](Get-Content -LiteralPath $env:MANIFEST -Raw); if($xml.ApplicationPackage.AppVersion -ne '1.0.1'){exit 1}"
 if errorlevel 1 (
-  echo The installed version is not v1.0.0.
+  echo The installed version is not v1.0.1.
   pause
   exit /b 1
 )
@@ -30,6 +30,6 @@ if exist "%SOURCE_DLL%" (
   )
 )
 
-echo QtoWirePlugin v1.0.0 Beta installation is valid.
+echo QtoWirePlugin v1.0.1 installation is valid.
 echo Installed at: %TARGET%
 pause

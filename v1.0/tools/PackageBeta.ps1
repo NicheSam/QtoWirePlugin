@@ -6,9 +6,9 @@ $project = Join-Path $root 'QtoWirePlugin.csproj'
 $bundle = Join-Path $root 'QtoWirePlugin_v1.0.bundle'
 $bundleWindows = Join-Path $bundle 'Contents\Windows'
 $release = Join-Path $root 'release'
-$installer = Join-Path $release 'QtoWirePlugin_v1.0.0-beta_installer'
+$installer = Join-Path $release 'QtoWirePlugin_v1.0.1_installer'
 $installerBundle = Join-Path $installer 'QtoWirePlugin.bundle'
-$zip = Join-Path $release 'QtoWirePlugin_v1.0.0-beta_installer.zip'
+$zip = Join-Path $release 'QtoWirePlugin_v1.0.1_installer.zip'
 $msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe'
 
 if (-not $SkipBuild) {
@@ -33,7 +33,9 @@ Copy-Item -LiteralPath (Join-Path $root 'docs\QTO_V1_0_BETA_VALIDATION.md') -Des
 Copy-Item -LiteralPath (Join-Path $root 'docs\QTO_V1_0_SECOND_PC_CHECKLIST.md') -Destination (Join-Path $installer 'docs') -Force
 Copy-Item -LiteralPath (Join-Path $root 'docs\QTO_V1_0_COMPLETION_MATRIX.md') -Destination (Join-Path $installer 'docs') -Force
 Copy-Item -LiteralPath (Join-Path $root 'docs\QTO_V1_0_UI_FLOW_MAP.md') -Destination (Join-Path $installer 'docs') -Force
+Copy-Item -LiteralPath (Join-Path $root 'docs\QTO_V1_0_UI_FLOW_AUDIT.md') -Destination (Join-Path $installer 'docs') -Force
+Copy-Item -LiteralPath (Join-Path $root 'docs\QTO_V1_0_1_PROJECT_SETUP_AND_BUDGET_COMPLETENESS.md') -Destination (Join-Path $installer 'docs') -Force
 
 if (Test-Path -LiteralPath $zip) { Remove-Item -LiteralPath $zip -Force }
 Compress-Archive -Path (Join-Path $installer '*') -DestinationPath $zip -CompressionLevel Optimal
-Write-Host "Beta package created: $zip"
+Write-Host "Release package created: $zip"

@@ -37,73 +37,190 @@ namespace QtoWirePlugin
         {
             Text = "QTO 弱電配線操作面板";
             StartPosition = FormStartPosition.CenterScreen;
-            Width = 1040;
-            Height = 760;
-            MinimumSize = new Size(980, 640);
-            AutoScroll = true;
-            AutoScrollMinSize = new Size(1020, 740);
+            Width = 960;
+            Height = 720;
+            MinimumSize = new Size(760, 560);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            QtoUiTheme.ApplyForm(this);
 
-            Label titleLabel = new Label();
-            titleLabel.Text = "QTO 弱電配線操作面板";
-            titleLabel.Font = new Font(Font.FontFamily, 16.0f, FontStyle.Bold);
-            titleLabel.AutoSize = true;
-            titleLabel.Location = new Point(18, 18);
-            Controls.Add(titleLabel);
+            TableLayoutPanel root = new TableLayoutPanel();
+            root.Dock = DockStyle.Fill;
+            root.Padding = QtoUiTheme.FormPadding;
+            root.ColumnCount = 1;
+            root.RowCount = 3;
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 62));
+            root.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 38));
+            Controls.Add(root);
 
-            Label hintLabel = new Label();
-            hintLabel.Text = "建議流程：標記出線口與箱體 → 編輯屬性 → 指定線槽 → 批次尋路 → 匯出線段明細。";
-            hintLabel.AutoSize = true;
-            hintLabel.Location = new Point(20, 56);
-            Controls.Add(hintLabel);
+            Panel header = new Panel { Dock = DockStyle.Fill };
+            Label titleLabel = new Label
+            {
+                Text = "QTO 弱電工作流程",
+                Font = QtoUiTheme.HeaderFont,
+                AutoSize = true,
+                Location = new Point(0, 2)
+            };
+            Label hintLabel = new Label
+            {
+                Text = "依目前工作選擇分頁；常用繪圖在前，整理、預算與報表分開處理。",
+                ForeColor = QtoUiTheme.MutedTextColor,
+                AutoSize = true,
+                Location = new Point(2, 34)
+            };
+            header.Controls.Add(titleLabel);
+            header.Controls.Add(hintLabel);
+            root.Controls.Add(header, 0, 0);
 
-            Panel diagramPanel = CreateDiagramPanel(700, 18, 300, 184);
-            Controls.Add(diagramPanel);
-
-            GroupBox markGroup = CreateGroup("標記與屬性", 18, 88, 650, 126);
-            Controls.Add(markGroup);
-            markGroup.Controls.Add(CreateButton("標記出線口", 18, 30, 132, 36, "QTO_MARK_OUTLETS"));
-            markGroup.Controls.Add(CreateButton("標記箱體", 162, 30, 132, 36, "QTO_MARK_JB"));
-            markGroup.Controls.Add(CreateButton("編輯出線口", 306, 30, 148, 36, "QTO_EDIT_OUTLET_PROPERTIES"));
-            markGroup.Controls.Add(CreateButton("編輯箱體", 466, 30, 132, 36, "QTO_EDIT_JB_PROPERTIES"));
-            markGroup.Controls.Add(CreateButton("刪除出線口", 18, 76, 132, 36, "QTO_DELETE_OUTLET_INFO"));
-            markGroup.Controls.Add(CreateButton("刪除箱體", 162, 76, 132, 36, "QTO_DELETE_JB_INFO"));
-            markGroup.Controls.Add(CreateButton("指向箱體", 306, 76, 148, 36, "QTO_CALLOUT_TO_JB"));
-            markGroup.Controls.Add(CreateButton("編號標註", 466, 76, 132, 36, "QTO_LABEL_OUTLETS"));
-
-            GroupBox drawingGroup = CreateGroup("快速繪圖", 18, 228, 650, 94);
-            Controls.Add(drawingGroup);
-            drawingGroup.Controls.Add(CreateButton("連續放置設備", 18, 34, 176, 36, "QTO_PLACE_CATALOG_CONTINUOUS"));
-            drawingGroup.Controls.Add(CreateButton("直接繪製線管", 206, 34, 176, 36, "QTO_DRAW_QTO_PATH"));
-            drawingGroup.Controls.Add(CreateButton("轉換既有物件", 394, 34, 176, 36, "QTO_CONVERT_LEGACY_OBJECTS"));
-
-            GroupBox routeGroup = CreateGroup("連接與範圍", 18, 336, 650, 94);
-            Controls.Add(routeGroup);
-            routeGroup.Controls.Add(CreateButton("一鍵連接", 18, 34, 132, 36, "QTO_CREATE_CONNECTIONS"));
-            routeGroup.Controls.Add(CreateButton("範圍管理", 162, 34, 132, 36, "QTO_SCOPE_MANAGER"));
-
-            GroupBox trayGroup = CreateGroup("線槽", 18, 444, 650, 94);
-            Controls.Add(trayGroup);
-            trayGroup.Controls.Add(CreateButton("標記線槽", 18, 34, 132, 36, "QTO_MARK_TRAY"));
-            trayGroup.Controls.Add(CreateButton("批次尋路", 162, 34, 132, 36, "QTO_BATCH_ROUTE_BY_TRAY"));
-            trayGroup.Controls.Add(CreateButton("清除線槽屬性", 306, 34, 160, 36, "QTO_CLEAR_TRAY_PROPERTIES"));
-            trayGroup.Controls.Add(CreateButton("管段到線槽", 478, 34, 132, 36, "QTO_CONDUIT_TO_TRAY"));
-
-            GroupBox reportGroup = CreateGroup("報表", 18, 552, 982, 94);
-            Controls.Add(reportGroup);
-            reportGroup.Controls.Add(CreateButton("出線口清單", 18, 34, 132, 36, "QTO_EXPORT_OUTLETS"));
-            reportGroup.Controls.Add(CreateButton("配線關係明細", 162, 34, 160, 36, "QTO_CHECK_WIRE"));
-            reportGroup.Controls.Add(CreateButton("線段明細", 334, 34, 132, 36, "QTO_EXPORT_JB_SUMMARY"));
-            reportGroup.Controls.Add(CreateButton("管段明細", 478, 34, 132, 36, "QTO_EXPORT_CONDUIT_SUMMARY"));
-            reportGroup.Controls.Add(CreateButton("屬性面板", 622, 34, 132, 36, "QTO_PROPERTY_PANEL"));
-            reportGroup.Controls.Add(CreateButton("預算CSV", 766, 34, 132, 36, "QTO_EXPORT_BUDGET_INPUT"));
+            TabControl tabs = new TabControl { Dock = DockStyle.Fill };
+            tabs.TabPages.Add(CreateWorkflowTab("繪圖與連接", new[]
+            {
+                CreateActionGroup("案件開始", "新案先確認圖塊庫；Excel、預算與範圍框可在需要時再設定，不阻擋繪圖。", new[]
+                {
+                    CreateFlowButton("案件設定", "QTO_PROJECT_SETUP", true)
+                }),
+                CreateActionGroup("1  放置與標記", "先建立有 QTO 資訊的設備、出線口與箱體。", new[]
+                {
+                    CreateFlowButton("連續放置設備", "QTO_PLACE_CATALOG_CONTINUOUS", true),
+                    CreateFlowButton("標記出線口", "QTO_MARK_OUTLETS", false),
+                    CreateFlowButton("標記箱體", "QTO_MARK_JB", false)
+                }),
+                CreateActionGroup("2  編輯與連接", "選取後修改屬性，再建立出線口、箱體與配線關係。", new[]
+                {
+                    CreateFlowButton("屬性面板", "QTO_PROPERTY_PANEL", true),
+                    CreateFlowButton("編輯出線口", "QTO_EDIT_OUTLET_PROPERTIES", false),
+                    CreateFlowButton("編輯箱體", "QTO_EDIT_JB_PROPERTIES", false),
+                    CreateFlowButton("指向箱體", "QTO_CALLOUT_TO_JB", false),
+                    CreateFlowButton("編號標註", "QTO_LABEL_OUTLETS", false),
+                    CreateFlowButton("一鍵連接", "QTO_CREATE_CONNECTIONS", false)
+                }),
+                CreateActionGroup("3  線管與線槽", "需要路徑計量時再使用；一般設備放置不必進入此區。", new[]
+                {
+                    CreateFlowButton("直接繪製線管", "QTO_DRAW_QTO_PATH", true),
+                    CreateFlowButton("標記線槽", "QTO_MARK_TRAY", false),
+                    CreateFlowButton("批次尋路", "QTO_BATCH_ROUTE_BY_TRAY", false),
+                    CreateFlowButton("管段到線槽", "QTO_CONDUIT_TO_TRAY", false),
+                    CreateFlowButton("清除線槽屬性", "QTO_CLEAR_TRAY_PROPERTIES", false)
+                })
+            }));
+            tabs.TabPages.Add(CreateWorkflowTab("整理與檢查", new[]
+            {
+                CreateActionGroup("範圍與分類", "用樓層框、系統框或條件選取批次整理既有 QTO 物件。", new[]
+                {
+                    CreateFlowButton("範圍管理", "QTO_SCOPE_MANAGER", true),
+                    CreateFlowButton("選取相同 QTO", "QTO_SELECT_SAME_QTO", false),
+                    CreateFlowButton("轉換既有物件", "QTO_CONVERT_LEGACY_OBJECTS", false)
+                }),
+                CreateActionGroup("問題處理", "先檢查，再在同一份清單中定位、修復或人工確認。", new[]
+                {
+                    CreateFlowButton("檢查與修復", "QTO_VALIDATE", true),
+                    CreateFlowButton("刪除出線口資訊", "QTO_DELETE_OUTLET_INFO", false),
+                    CreateFlowButton("刪除箱體資訊", "QTO_DELETE_JB_INFO", false)
+                })
+            }));
+            tabs.TabPages.Add(CreateWorkflowTab("預算與圖塊", new[]
+            {
+                CreateActionGroup("預算流程", "先連結預算 Excel，再建立並確認 CAD 計量群組與預算品項的對應。", new[]
+                {
+                    CreateFlowButton("同步主控", "QTO_PANEL", true),
+                    CreateFlowButton("預算對應", "QTO_BUDGET_MAPPING", true),
+                    CreateFlowButton("預算完整性", "QTO_BUDGET_COMPLETENESS", true),
+                    CreateFlowButton("更新預算 Excel", "QTO_SYNC_FULL_REBUILD", false)
+                }),
+                CreateActionGroup("標準圖塊", "插入日常使用圖塊；資料庫管理與專案更新只在需要時開啟。", new[]
+                {
+                    CreateFlowButton("插入標準圖塊", "QTO_INSERT_CATALOG_BLOCK", true),
+                    CreateFlowButton("管理圖塊庫", "QTO_BLOCK_LIBRARY_MANAGER", false),
+                    CreateFlowButton("更新專案圖塊", "QTO_UPDATE_PROJECT_BLOCKS", false)
+                })
+            }));
+            tabs.TabPages.Add(CreateWorkflowTab("報表", new[]
+            {
+                CreateActionGroup("檢查與交付", "報表是檢查與整理用途；預算 Excel 請從同步主控處理。", new[]
+                {
+                    CreateFlowButton("出線口清單", "QTO_EXPORT_OUTLETS", true),
+                    CreateFlowButton("配線關係明細", "QTO_CHECK_WIRE", false),
+                    CreateFlowButton("線段明細", "QTO_EXPORT_JB_SUMMARY", false),
+                    CreateFlowButton("管段明細", "QTO_EXPORT_CONDUIT_SUMMARY", false),
+                    CreateFlowButton("預算前置 CSV", "QTO_EXPORT_BUDGET_INPUT", false)
+                })
+            }));
+            root.Controls.Add(tabs, 0, 1);
 
             statusTextBox = new TextBox();
-            statusTextBox.Location = new Point(18, 666);
-            statusTextBox.Width = 982;
-            statusTextBox.Height = 32;
+            statusTextBox.Dock = DockStyle.Fill;
             statusTextBox.ReadOnly = true;
             statusTextBox.Text = "就緒。";
-            Controls.Add(statusTextBox);
+            QtoUiTheme.ApplyReadOnlyTextBox(statusTextBox);
+            root.Controls.Add(statusTextBox, 0, 2);
+        }
+
+        private TabPage CreateWorkflowTab(string title, Control[] groups)
+        {
+            TabPage tab = new TabPage(title) { BackColor = QtoUiTheme.WindowBackColor, Padding = new Padding(8) };
+            FlowLayoutPanel flow = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                FlowDirection = System.Windows.Forms.FlowDirection.TopDown,
+                WrapContents = false,
+                Padding = new Padding(2)
+            };
+            flow.SizeChanged += delegate
+            {
+                foreach (Control control in flow.Controls)
+                {
+                    control.Width = Math.Max(500, flow.ClientSize.Width - 28);
+                }
+            };
+            foreach (Control group in groups)
+            {
+                group.Width = 820;
+                flow.Controls.Add(group);
+            }
+            tab.Controls.Add(flow);
+            return tab;
+        }
+
+        private Control CreateActionGroup(string title, string hint, Button[] buttons)
+        {
+            GroupBox group = new GroupBox
+            {
+                Text = title,
+                Height = 116,
+                Padding = QtoUiTheme.GroupPadding,
+                BackColor = QtoUiTheme.PanelBackColor
+            };
+            Label hintLabel = new Label
+            {
+                Text = hint,
+                Dock = DockStyle.Top,
+                Height = 26,
+                ForeColor = QtoUiTheme.MutedTextColor
+            };
+            FlowLayoutPanel actions = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                WrapContents = false,
+                Padding = new Padding(0, 4, 0, 0)
+            };
+            actions.Controls.AddRange(buttons);
+            group.Controls.Add(actions);
+            group.Controls.Add(hintLabel);
+            return group;
+        }
+
+        private Button CreateFlowButton(string text, string commandName, bool primary)
+        {
+            Button button = CreateButton(text, 0, 0, 158, 34, commandName);
+            button.Margin = new Padding(0, 0, 8, 0);
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderColor = primary ? QtoUiTheme.PrimaryColor : QtoUiTheme.BorderColor;
+            button.BackColor = primary ? QtoUiTheme.PrimaryColor : Color.White;
+            button.ForeColor = primary ? Color.White : QtoUiTheme.TextColor;
+            button.UseVisualStyleBackColor = false;
+            return button;
         }
 
         private static GroupBox CreateGroup(string title, int x, int y, int width, int height)

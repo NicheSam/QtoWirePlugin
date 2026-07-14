@@ -157,6 +157,7 @@ namespace QtoWirePlugin
             RibbonPanelSource source = new RibbonPanelSource();
             source.Title = "\u6d41\u7a0b";
 
+            source.Items.Add(CreateButton("案件\n設定", "QTO_PROJECT_SETUP", RibbonItemSize.Large));
             source.Items.Add(CreateButton("\u64cd\u4f5c\n\u9762\u677f", "QTO_WORKFLOW_PANEL", RibbonItemSize.Large));
             source.Items.Add(CreateButton("\u4e00\u9375\n\u9023\u63a5", "QTO_CREATE_CONNECTIONS", RibbonItemSize.Large));
 
@@ -235,6 +236,7 @@ namespace QtoWirePlugin
 
             source.Items.Add(CreateButton("屬性\n面板", "QTO_PROPERTY_PANEL", RibbonItemSize.Large));
             source.Items.Add(CreateButton("預算\n對應", "QTO_BUDGET_MAPPING", RibbonItemSize.Large));
+            source.Items.Add(CreateButton("完整性\n檢查", "QTO_BUDGET_COMPLETENESS", RibbonItemSize.Large));
 
             RibbonPanel panel = new RibbonPanel();
             panel.Source = source;
@@ -478,6 +480,8 @@ namespace QtoWirePlugin
                     return "\u958b\u555f Excel \u540c\u6b65\u4e3b\u63a7\uff0c\u7ba1\u7406\u9810\u7b97\u6a94\u6848\u3001\u81ea\u52d5\u540c\u6b65\u3001\u6aa2\u67e5\u8207\u4fee\u5fa9\u3002";
                 case "QTO_WORKFLOW_PANEL":
                     return "\u958b\u555f\u5f31\u96fb\u5de5\u4f5c\u6d41\u7a0b\u9762\u677f\uff0c\u96c6\u4e2d\u64cd\u4f5c\u6a19\u8a18\u3001\u914d\u7dda\u3001\u7dda\u69fd\u8207\u5831\u8868\u3002";
+                case "QTO_PROJECT_SETUP":
+                    return "集中確認本 DWG 的圖塊資料庫、預算 Excel、正式預算、對應規則、範圍框與同步狀態。";
                 case "QTO_PROPERTY_PANEL":
                     return "開啟 QTO 屬性面板，挑選圖塊或線條後可查看、編輯、儲存預算前置屬性。";
                 case "QTO_EXPORT_BUDGET_INPUT":
@@ -498,6 +502,8 @@ namespace QtoWirePlugin
                     return "將既有圖塊或線段批次轉成 QTO 物件，不必重新繪製。";
                 case "QTO_BUDGET_MAPPING":
                     return "匯入正式預算格式，將 CAD 計量群組對應到預算明細並確認數量規則。";
+                case "QTO_BUDGET_COMPLETENESS":
+                    return "檢查 CAD 有而預算未對應、預算無 CAD 來源、待確認規則與單位衝突。";
                 case "QTO_SYNC_FULL_REBUILD":
                     return "立即依目前 CAD 圖面重整預算 Excel；自動同步未完成或需強制重套版面時使用。";
                 case "QTO_VALIDATE":

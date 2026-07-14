@@ -7,6 +7,7 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $fixtureDirectory = Join-Path $root 'tests\fixtures'
 $coreConsole = 'C:\Program Files\Autodesk\AutoCAD 2023\accoreconsole.exe'
+$inputDrawing = Join-Path $fixtureDirectory 'qto_validation_fixture.dwg'
 
 if ($Installed) {
     $dll = Join-Path ([Environment]::GetFolderPath('ApplicationData')) 'Autodesk\ApplicationPlugins\QtoWirePlugin.bundle\Contents\Windows\QtoWirePlugin.dll'
@@ -17,7 +18,7 @@ else {
     $report = Join-Path $fixtureDirectory 'qto_validation_report.txt'
 }
 
-foreach ($required in @($coreConsole, $dll)) {
+foreach ($required in @($coreConsole, $dll, $inputDrawing)) {
     if (-not (Test-Path -LiteralPath $required)) {
         throw "Required validation file is missing: $required"
     }
@@ -35,7 +36,7 @@ $scriptText = @(
 
 $previousWriteTime = if (Test-Path -LiteralPath $report) { (Get-Item -LiteralPath $report).LastWriteTimeUtc } else { [datetime]::MinValue }
 $env:QTO_FIXTURE_REPORT = $report
-$process = Start-Process -FilePath $coreConsole -ArgumentList @('/s', $scriptPath, '/l', 'en-US') -PassThru -WindowStyle Hidden
+$process = Start-Process -FilePath $coreConsole -ArgumentList @('/i', $inputDrawing, '/s', $scriptPath, '/l', 'en-US') -PassThru -WindowStyle Hidden
 $deadline = [datetime]::UtcNow.AddSeconds($TimeoutSeconds)
 
 try {
@@ -55,6 +56,9 @@ try {
     $reportText = Get-Content -LiteralPath $report -Raw -Encoding utf8
     if ($reportText -notmatch 'Status=PASS') {
         throw "Core validation failed.`r`n$reportText"
+    }
+    if ($reportText -notmatch 'BudgetStoreRoundTrip=True') {
+        throw "Budget project store date round-trip validation is missing or failed.`r`n$reportText"
     }
 
     Write-Host $reportText.TrimEnd()

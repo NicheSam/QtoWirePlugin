@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Autodesk.AutoCAD.DatabaseServices;
 
 namespace QtoWirePlugin
@@ -9,6 +10,7 @@ namespace QtoWirePlugin
     {
         private const string SettingsDictionaryKey = "QTO_PROJECT_SETTINGS";
         private const string CatalogPathKey = "CATALOG_PATH";
+        private const string WorkbookPathKey = "WORKBOOK_PATH";
         private const string SchemaVersionKey = "SCHEMA_VERSION";
 
         public static string GetPreferredCatalogPath(Database database)
@@ -59,7 +61,66 @@ namespace QtoWirePlugin
                 throw new ArgumentException("Catalog path is required.", "catalogPath");
             }
 
-            string storedPath = BuildStoredPath(database, catalogPath);
+            SetPathValue(database, CatalogPathKey, catalogPath);
+        }
+
+        public static string GetConfiguredWorkbookPath(Database database)
+        {
+            return GetPathValue(database, WorkbookPathKey);
+        }
+
+        public static void SetWorkbookPath(Database database, string workbookPath)
+        {
+            if (string.IsNullOrWhiteSpace(workbookPath))
+            {
+                throw new ArgumentException("Workbook path is required.", "workbookPath");
+            }
+
+            SetPathValue(database, WorkbookPathKey, workbookPath);
+        }
+
+        public static void ClearWorkbookPath(Database database)
+        {
+            SetStringValue(database, WorkbookPathKey, string.Empty);
+        }
+
+        private static string GetPathValue(Database database, string key)
+        {
+            if (database == null)
+            {
+                return string.Empty;
+            }
+
+            string storedPath = string.Empty;
+            using (Transaction transaction = database.TransactionManager.StartOpenCloseTransaction())
+            {
+                DBDictionary namedObjects = transaction.GetObject(database.NamedObjectsDictionaryId, OpenMode.ForRead, false) as DBDictionary;
+                if (namedObjects == null || !namedObjects.Contains(SettingsDictionaryKey))
+                {
+                    return string.Empty;
+                }
+
+                Xrecord record = transaction.GetObject(namedObjects.GetAt(SettingsDictionaryKey), OpenMode.ForRead, false) as Xrecord;
+                Dictionary<string, string> values = ReadValues(record == null ? null : record.Data);
+                values.TryGetValue(key, out storedPath);
+            }
+
+            return ResolveStoredPath(database, storedPath);
+        }
+
+        private static void SetPathValue(Database database, string key, string path)
+        {
+            if (database == null)
+            {
+                throw new ArgumentNullException("database");
+            }
+
+            SetStringValue(database, key, BuildStoredPath(database, path));
+        }
+
+        private static void SetStringValue(Database database, string key, string value)
+        {
+            Dictionary<string, string> values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             using (Transaction transaction = database.TransactionManager.StartTransaction())
             {
                 DBDictionary namedObjects = transaction.GetObject(database.NamedObjectsDictionaryId, OpenMode.ForRead, false) as DBDictionary;
@@ -68,6 +129,10 @@ namespace QtoWirePlugin
                 if (namedObjects.Contains(SettingsDictionaryKey))
                 {
                     record = transaction.GetObject(namedObjects.GetAt(SettingsDictionaryKey), OpenMode.ForWrite, false) as Xrecord;
+                    foreach (KeyValuePair<string, string> item in ReadValues(record == null ? null : record.Data))
+                    {
+                        values[item.Key] = item.Value;
+                    }
                 }
                 else
                 {
@@ -77,11 +142,15 @@ namespace QtoWirePlugin
                     transaction.AddNewlyCreatedDBObject(record, true);
                 }
 
-                record.Data = new ResultBuffer(
-                    new TypedValue((int)DxfCode.Text, SchemaVersionKey),
-                    new TypedValue((int)DxfCode.Text, "1"),
-                    new TypedValue((int)DxfCode.Text, CatalogPathKey),
-                    new TypedValue((int)DxfCode.Text, storedPath));
+                values[SchemaVersionKey] = "2";
+                values[key] = value ?? string.Empty;
+                ResultBuffer buffer = new ResultBuffer();
+                foreach (KeyValuePair<string, string> item in values.OrderBy(item => item.Key, StringComparer.OrdinalIgnoreCase))
+                {
+                    buffer.Add(new TypedValue((int)DxfCode.Text, item.Key));
+                    buffer.Add(new TypedValue((int)DxfCode.Text, item.Value ?? string.Empty));
+                }
+                record.Data = buffer;
                 transaction.Commit();
             }
         }

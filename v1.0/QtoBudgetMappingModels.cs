@@ -23,6 +23,14 @@ namespace QtoWirePlugin
         public const string PerArea = "per_area";
     }
 
+    public static class QtoBudgetCoverageMode
+    {
+        public const string Cad = "cad";
+        public const string Manual = "manual";
+        public const string Fixed = "fixed";
+        public const string Excluded = "excluded";
+    }
+
     [DataContract]
     public sealed class QtoBudgetMasterItem
     {
@@ -77,6 +85,15 @@ namespace QtoWirePlugin
     }
 
     [DataContract]
+    public sealed class QtoBudgetCoverageOverride
+    {
+        [DataMember(Order = 1)] public string BudgetItemId { get; set; }
+        [DataMember(Order = 2)] public string CoverageMode { get; set; }
+        [DataMember(Order = 3)] public string Note { get; set; }
+        [DataMember(Order = 4)] public DateTime UpdatedAt { get; set; }
+    }
+
+    [DataContract]
     public sealed class QtoBudgetProjectData
     {
         public QtoBudgetProjectData()
@@ -84,6 +101,7 @@ namespace QtoWirePlugin
             MasterItems = new List<QtoBudgetMasterItem>();
             MappingRules = new List<QtoBudgetMappingRule>();
             CompanyBindings = new List<QtoProjectBudgetBinding>();
+            CoverageOverrides = new List<QtoBudgetCoverageOverride>();
         }
 
         [DataMember(Order = 1)] public int SchemaVersion { get; set; }
@@ -94,6 +112,7 @@ namespace QtoWirePlugin
         [DataMember(Order = 6)] public string CompanyProfileId { get; set; }
         [DataMember(Order = 7)] public int CompanyProfileVersion { get; set; }
         [DataMember(Order = 8)] public List<QtoProjectBudgetBinding> CompanyBindings { get; set; }
+        [DataMember(Order = 9)] public List<QtoBudgetCoverageOverride> CoverageOverrides { get; set; }
     }
 
     public sealed class QtoMappedBudgetRow

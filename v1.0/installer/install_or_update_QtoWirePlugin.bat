@@ -28,7 +28,7 @@ if errorlevel 1 (
   exit /b 1
 )
 echo.
-echo QtoWirePlugin v1.0.0 Beta installed and verified.
+echo QtoWirePlugin v1.0.1 installed and verified.
 echo Start AutoCAD 2023 and check the QTO ribbon tab.
 echo Excel will only open after you choose the sync command.
 pause

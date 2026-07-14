@@ -115,9 +115,13 @@ internal static class QtoCatalogSmokeTest
                 Application.EnableVisualStyles();
                 ShowAndClose(new QtoBlockLibraryPickerForm(fixturePath));
                 ShowAndClose(new QtoBlockCatalogManagerForm(fixturePath, new QtoDictionaryStore()));
+                ShowAndClose(new QtoWorkflowForm());
+                ShowAndClose(new QtoBudgetExportOptionsForm(12, 3));
+                ShowAndClose(new QtoSelectSameOptionsForm(new QtoSelectSameOptions(), new QtoDictionaryStore(), new List<string> { "Cat6" }));
+                ShowAndClose(new QtoEditPropertiesForm("批次編輯出線口", 3, true, new Dictionary<string, string>()));
             }
 
-            Console.WriteLine("QtoWirePlugin v1.0.0 Beta catalog smoke test passed.");
+            Console.WriteLine("QtoWirePlugin v1.0.1 catalog smoke test passed.");
             return 0;
         }
         catch (Exception ex)

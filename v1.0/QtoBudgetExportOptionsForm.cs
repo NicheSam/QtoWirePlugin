@@ -72,45 +72,49 @@ namespace QtoWirePlugin
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
-            Width = 540;
-            Height = 390;
+            Width = 680;
+            Height = 460;
+            MinimumSize = new Size(560, 400);
+            QtoUiTheme.ApplyForm(this);
 
-            Label titleLabel = new Label();
-            titleLabel.Text = "請勾選要匯出的 CSV 資訊";
-            titleLabel.Font = new Font(SystemFonts.MessageBoxFont.FontFamily, 12.0f, FontStyle.Bold);
-            titleLabel.Location = new Point(18, 16);
-            titleLabel.AutoSize = true;
-            Controls.Add(titleLabel);
+            TableLayoutPanel root = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = QtoUiTheme.FormPadding, ColumnCount = 1, RowCount = 3 };
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 70));
+            root.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+            Panel header = new Panel { Dock = DockStyle.Fill };
+            header.Controls.Add(new Label { Text = "匯出預算前置 CSV", Dock = DockStyle.Top, Height = 30, Font = QtoUiTheme.HeaderFont, ForeColor = QtoUiTheme.TextColor });
+            header.Controls.Add(new Label { Text = "可匯出 " + rowCount + " 筆，其中 " + reviewCount + " 筆需人工確認。此檔用於預算檢查，不是正式報價表。", Dock = DockStyle.Bottom, Height = 32, ForeColor = QtoUiTheme.MutedTextColor });
+            root.Controls.Add(header, 0, 0);
 
-            Label summaryLabel = new Label();
-            summaryLabel.Text = "目前可匯出筆數：" + rowCount + "；需人工確認：" + reviewCount;
-            summaryLabel.Location = new Point(20, 46);
-            summaryLabel.AutoSize = true;
-            Controls.Add(summaryLabel);
+            FlowLayoutPanel options = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoScroll = true, FlowDirection = System.Windows.Forms.FlowDirection.TopDown, WrapContents = false, BackColor = QtoUiTheme.PanelBackColor, Padding = new Padding(12) };
 
-            objectIdentityCheckBox = CreateCheckBox("物件識別", "來源DWG、物件識別碼、圖塊名稱、圖層", 22, 82);
-            cadQuantityCheckBox = CreateCheckBox("CAD計量", "CAD計量型態、QTO編號、數量依據、QTO數量、單位、長度", 22, 122);
-            systemEquipmentCheckBox = CreateCheckBox("系統與設備", "系統代碼、設備類型代碼、設備類型名稱", 22, 162);
-            locationRoutingCheckBox = CreateCheckBox("位置與配線", "樓層、區域、空間、線材類型、管線類型、管線尺寸、線槽尺寸", 22, 202);
-            reviewStatusCheckBox = CreateCheckBox("對應檢查", "對應狀態、待確認原因、資料來源規則", 22, 242);
+            objectIdentityCheckBox = CreateCheckBox("物件識別", "來源 DWG、物件識別碼、圖塊名稱、圖層", 0, 0);
+            cadQuantityCheckBox = CreateCheckBox("CAD 計量", "CAD 計量型態、QTO 編號、數量依據、數量、單位、長度", 0, 0);
+            systemEquipmentCheckBox = CreateCheckBox("系統與設備", "系統代碼、設備類型代碼、設備類型名稱", 0, 0);
+            locationRoutingCheckBox = CreateCheckBox("位置與配線", "樓層、區域、空間、線材、管線與線槽資料", 0, 0);
+            reviewStatusCheckBox = CreateCheckBox("對應檢查", "對應狀態、待確認原因、資料來源規則", 0, 0);
 
-            Controls.Add(objectIdentityCheckBox);
-            Controls.Add(cadQuantityCheckBox);
-            Controls.Add(systemEquipmentCheckBox);
-            Controls.Add(locationRoutingCheckBox);
-            Controls.Add(reviewStatusCheckBox);
+            options.Controls.Add(objectIdentityCheckBox);
+            options.Controls.Add(cadQuantityCheckBox);
+            options.Controls.Add(systemEquipmentCheckBox);
+            options.Controls.Add(locationRoutingCheckBox);
+            options.Controls.Add(reviewStatusCheckBox);
+            options.SizeChanged += delegate { foreach (Control control in options.Controls) control.Width = Math.Max(460, options.ClientSize.Width - 30); };
+            root.Controls.Add(options, 0, 1);
 
-            Button allButton = CreateButton("全選", 22, 300, 72, SelectAllButtonClick);
-            Button clearButton = CreateButton("清除", 102, 300, 72, ClearButtonClick);
-            Button okButton = CreateButton("確定", 346, 300, 72, OkButtonClick);
-            Button cancelButton = CreateButton("取消", 426, 300, 72, CancelButtonClick);
+            FlowLayoutPanel buttons = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft, WrapContents = false, Padding = new Padding(0, 8, 0, 0) };
+            Button allButton = QtoUiTheme.CreateButton("全選", SelectAllButtonClick, QtoButtonRole.Secondary);
+            Button clearButton = QtoUiTheme.CreateButton("全部取消", ClearButtonClick, QtoButtonRole.Secondary);
+            Button okButton = QtoUiTheme.CreateButton("匯出 CSV", OkButtonClick, QtoButtonRole.Primary);
+            Button cancelButton = QtoUiTheme.CreateButton("取消", CancelButtonClick, QtoButtonRole.Secondary);
             AcceptButton = okButton;
             CancelButton = cancelButton;
-
-            Controls.Add(allButton);
-            Controls.Add(clearButton);
-            Controls.Add(okButton);
-            Controls.Add(cancelButton);
+            buttons.Controls.Add(cancelButton);
+            buttons.Controls.Add(okButton);
+            buttons.Controls.Add(clearButton);
+            buttons.Controls.Add(allButton);
+            root.Controls.Add(buttons, 0, 2);
+            Controls.Add(root);
         }
 
         public QtoBudgetExportOptions Options

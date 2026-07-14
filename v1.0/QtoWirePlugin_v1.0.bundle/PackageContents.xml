@@ -3,9 +3,9 @@
   SchemaVersion="1.0"
   AutodeskProduct="AutoCAD"
   ProductType="Application"
-  Name="QtoWirePlugin V1.0.0 Beta"
+  Name="QtoWirePlugin V1.0.1"
   Description="QTO weak-current wiring workflow tools for AutoCAD 2023."
-  AppVersion="1.0.0"
+  AppVersion="1.0.1"
   ProductCode="{54E25567-6909-45A4-8338-4572CA9B1EE9}">
   <CompanyDetails
     Name="DEX"
@@ -16,7 +16,7 @@
     Platform="AutoCAD"
     SeriesMin="R24.2"
     SeriesMax="R24.2" />
-  <Components Description="QtoWirePlugin V1.0.0 Beta managed .NET assembly">
+  <Components Description="QtoWirePlugin V1.0.1 managed .NET assembly">
     <RuntimeRequirements
       OS="Win64"
       Platform="AutoCAD"
@@ -33,6 +33,7 @@
         <Command Global="QTO_SHOW_UI" Local="QTO_SHOW_UI" />
         <Command Global="QTO_PANEL" Local="QTO_PANEL" />
         <Command Global="QTO_WORKFLOW_PANEL" Local="QTO_WORKFLOW_PANEL" />
+        <Command Global="QTO_PROJECT_SETUP" Local="QTO_PROJECT_SETUP" />
         <Command Global="QTO_TEST_XDATA" Local="QTO_TEST_XDATA" />
         <Command Global="QTO_CREATE_CONNECTIONS" Local="QTO_CREATE_CONNECTIONS" />
         <Command Global="QTO_MARK_OUTLETS" Local="QTO_MARK_OUTLETS" />
@@ -80,6 +81,7 @@
         <Command Global="QTO_INSERT_CATALOG_BLOCK" Local="QTO_INSERT_CATALOG_BLOCK" />
         <Command Global="QTO_UPDATE_PROJECT_BLOCKS" Local="QTO_UPDATE_PROJECT_BLOCKS" />
         <Command Global="QTO_BUDGET_MAPPING" Local="QTO_BUDGET_MAPPING" />
+        <Command Global="QTO_BUDGET_COMPLETENESS" Local="QTO_BUDGET_COMPLETENESS" />
         <Command Global="QTO_SELECT_UNTAGGED" Local="QTO_SELECT_UNTAGGED" />
         <Command Global="QTO_SELECT_SAME_QTO" Local="QTO_SELECT_SAME_QTO" />
         <Command Global="QTO_SCOPE_DEFINE_FLOOR" Local="QTO_SCOPE_DEFINE_FLOOR" />

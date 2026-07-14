@@ -84,7 +84,7 @@ internal static class QtoExcelSmokeTest
             Dictionary<string, string> mappedRow = budgetRows.FirstOrDefault(row => Get(row, "預算Key") == "BI-SMOKE");
             Assert(mappedRow != null && Get(mappedRow, "數量") == "2", "Confirmed mapping should write the CAD quantity to the formal budget row.");
 
-            Console.WriteLine("QtoWirePlugin v1.0.0 Beta Excel smoke test passed.");
+            Console.WriteLine("QtoWirePlugin v1.0.1 Excel smoke test passed.");
             return 0;
         }
         catch (Exception ex)

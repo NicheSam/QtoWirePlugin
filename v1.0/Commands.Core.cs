@@ -22,7 +22,7 @@ namespace QtoWirePlugin
                     return;
                 }
 
-                editor.WriteMessage("\nQtoWirePlugin V1.0.0 Beta \u5df2\u6210\u529f\u8f09\u5165\u3002");
+                editor.WriteMessage("\nQtoWirePlugin V1.0.1 \u5df2\u6210\u529f\u8f09\u5165\u3002");
             }
             catch (System.Exception ex)
             {

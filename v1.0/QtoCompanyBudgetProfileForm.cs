@@ -30,17 +30,19 @@ namespace QtoWirePlugin
             Height = 680;
             MinimumSize = new System.Drawing.Size(820, 520);
             StartPosition = FormStartPosition.CenterParent;
-            Font = new System.Drawing.Font("Microsoft JhengHei UI", 9F);
+            QtoUiTheme.ApplyForm(this);
 
-            FlowLayoutPanel actions = new FlowLayoutPanel { Dock = DockStyle.Top, Height = 48, Padding = new Padding(10, 8, 10, 4), WrapContents = false };
-            actions.Controls.Add(ActionButton("建立／重建公司基準", CreateBaseline));
-            actions.Controls.Add(ActionButton("重新比對案件", RebuildBindings));
-            actions.Controls.Add(ActionButton("指定案件品項", AssignProjectItem));
-            actions.Controls.Add(ActionButton("確認選取", ConfirmSelected));
-            actions.Controls.Add(ActionButton("編輯品項別名", EditAliases));
-            actions.Controls.Add(ActionButton("儲存並關閉", SaveAndClose));
+            Panel header = new Panel { Dock = DockStyle.Top, Height = 64, Padding = new Padding(12, 8, 12, 4) };
+            header.Controls.Add(new Label { Text = "公司預算規則庫", Dock = DockStyle.Top, Height = 30, Font = QtoUiTheme.HeaderFont, ForeColor = QtoUiTheme.TextColor });
+            header.Controls.Add(new Label { Text = "先建立公司基準，再逐筆確認案件品項。公司規則不會因案件確認而自動改寫。", Dock = DockStyle.Bottom, Height = 24, ForeColor = QtoUiTheme.MutedTextColor });
 
-            summary = new Label { Dock = DockStyle.Top, Height = 58, Padding = new Padding(12, 8, 12, 6), AutoEllipsis = true };
+            FlowLayoutPanel actions = new FlowLayoutPanel { Dock = DockStyle.Top, Height = 48, Padding = new Padding(10, 8, 10, 4), WrapContents = false, AutoScroll = true };
+            actions.Controls.Add(ActionButton("建立／重建公司基準", CreateBaseline, QtoButtonRole.Primary));
+            actions.Controls.Add(ActionButton("重新比對案件", RebuildBindings, QtoButtonRole.Default));
+            actions.Controls.Add(ActionButton("編輯品項別名", EditAliases, QtoButtonRole.Secondary));
+            actions.Controls.Add(ActionButton("儲存並關閉", SaveAndClose, QtoButtonRole.Primary));
+
+            summary = new Label { Dock = DockStyle.Top, Height = 58, Padding = new Padding(12, 8, 12, 6), AutoEllipsis = true, ForeColor = QtoUiTheme.MutedTextColor };
             bindingGrid = new DataGridView
             {
                 Dock = DockStyle.Fill,
@@ -54,23 +56,33 @@ namespace QtoWirePlugin
                 RowHeadersVisible = false,
                 BackgroundColor = System.Drawing.SystemColors.Window
             };
+            QtoUiTheme.ApplyGrid(bindingGrid);
 
-            Panel assignPanel = new Panel { Dock = DockStyle.Bottom, Height = 54, Padding = new Padding(10, 9, 10, 8) };
+            TableLayoutPanel assignPanel = new TableLayoutPanel { Dock = DockStyle.Bottom, Height = 58, Padding = new Padding(10, 9, 10, 8), ColumnCount = 4, RowCount = 1 };
+            assignPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 112));
+            assignPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            assignPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 116));
+            assignPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 104));
             projectItem = new ComboBox { Dock = DockStyle.Fill, DropDownStyle = ComboBoxStyle.DropDownList };
-            assignPanel.Controls.Add(projectItem);
-            assignPanel.Controls.Add(new Label { Text = "案件預算品項", Dock = DockStyle.Left, Width = 110, TextAlign = System.Drawing.ContentAlignment.MiddleLeft });
+            assignPanel.Controls.Add(new Label { Text = "案件預算品項", Dock = DockStyle.Fill, TextAlign = System.Drawing.ContentAlignment.MiddleLeft }, 0, 0);
+            assignPanel.Controls.Add(projectItem, 1, 0);
+            assignPanel.Controls.Add(ActionButton("指定給選取列", AssignProjectItem, QtoButtonRole.Default), 2, 0);
+            assignPanel.Controls.Add(ActionButton("確認選取", ConfirmSelected, QtoButtonRole.Primary), 3, 0);
 
             Controls.Add(bindingGrid);
             Controls.Add(assignPanel);
             Controls.Add(summary);
             Controls.Add(actions);
+            Controls.Add(header);
             LoadView();
         }
 
-        private static Button ActionButton(string text, EventHandler handler)
+        private static Button ActionButton(string text, EventHandler handler, QtoButtonRole role)
         {
-            Button button = new Button { Text = text, AutoSize = true, Height = 30, Margin = new Padding(0, 0, 8, 0) };
-            button.Click += handler;
+            Button button = QtoUiTheme.CreateButton(text, handler, role);
+            button.AutoSize = true;
+            button.Dock = DockStyle.Fill;
+            button.Margin = new Padding(4, 0, 4, 0);
             return button;
         }
 

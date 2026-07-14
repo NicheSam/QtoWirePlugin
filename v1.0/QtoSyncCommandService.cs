@@ -32,8 +32,18 @@ namespace QtoWirePlugin
         private static bool pendingAutoSync;
         private static int autoSyncRetryCount;
         private static string autoSyncDrawingIdentity;
+        private static string currentExcelPath;
+        private static string currentExcelDrawingIdentity;
 
-        public static string CurrentExcelPath { get; set; }
+        public static string CurrentExcelPath
+        {
+            get { return currentExcelPath; }
+            set
+            {
+                currentExcelPath = value ?? string.Empty;
+                currentExcelDrawingIdentity = GetDocumentIdentity(AcApplication.DocumentManager.MdiActiveDocument);
+            }
+        }
         public static QtoValidationResult LastValidationResult { get; private set; }
         public static bool IsAutoSyncActive { get { return autoSyncActive; } }
         public static QtoExcelResult LastAutoSyncResult { get; private set; }
@@ -44,13 +54,14 @@ namespace QtoWirePlugin
         {
             try
             {
+                RestoreWorkbookPathForActiveDrawing();
                 string workbookPath = EnsureWorkbookPath(CurrentExcelPath);
                 if (string.IsNullOrWhiteSpace(workbookPath))
                 {
                     return Ok("已取消啟用自動同步。", 0);
                 }
 
-                CurrentExcelPath = workbookPath;
+                LinkWorkbookToActiveDrawing(workbookPath);
                 QtoExcelResult initialUpdate = FullRebuildExcel(workbookPath);
                 if (!initialUpdate.Success)
                 {
@@ -170,16 +181,24 @@ namespace QtoWirePlugin
                 return new QtoValidationResult();
             }
 
+            QtoValidationResult result;
             using (DocumentLock documentLock = document.LockDocument())
             using (Transaction transaction = document.Database.TransactionManager.StartTransaction())
             {
                 QtoCatalogSnapshot catalog = QtoProjectCatalogContext.LoadSnapshot(document.Database);
-                QtoValidationResult result = QtoValidateService.ValidateDrawing(transaction, document.Database, catalog);
+                result = QtoValidateService.ValidateDrawing(transaction, document.Database, catalog);
                 transaction.Commit();
-                result.ReviewItems.AddRange(QtoBlockUpdateReviewStore.Load(document.Database));
-                LastValidationResult = result;
-                return result;
             }
+
+            result.ReviewItems.AddRange(QtoBlockUpdateReviewStore.Load(document.Database));
+            QtoBudgetProjectData budgetProject = QtoBudgetProjectStore.Load(document.Database);
+            if (budgetProject.MasterItems.Count > 0 || budgetProject.MappingRules.Count > 0)
+            {
+                QtoBudgetCompletenessResult completeness = QtoBudgetCompletenessService.Analyze(BuildCurrentDrawingRows(), budgetProject);
+                result.ReviewItems.AddRange(QtoBudgetCompletenessService.ToReviewItems(completeness));
+            }
+            LastValidationResult = result;
+            return result;
         }
 
         public static QtoRepairResult RepairCurrentDrawing()
@@ -208,6 +227,18 @@ namespace QtoWirePlugin
 
         public static QtoExcelResult FullRebuildExcel(string workbookPath)
         {
+            string activeIdentity = GetDocumentIdentity(AcApplication.DocumentManager.MdiActiveDocument);
+            if (!string.Equals(activeIdentity, currentExcelDrawingIdentity, StringComparison.OrdinalIgnoreCase))
+            {
+                string stalePath = currentExcelPath;
+                string linkedPath = RestoreWorkbookPathForActiveDrawing();
+                if (string.IsNullOrWhiteSpace(workbookPath)
+                    || string.Equals(workbookPath, stalePath, StringComparison.OrdinalIgnoreCase))
+                {
+                    workbookPath = linkedPath;
+                }
+            }
+
             if (workbookUpdateInProgress)
             {
                 return QtoExcelResult.Fail(
@@ -225,7 +256,7 @@ namespace QtoWirePlugin
                     return QtoExcelResult.Fail(string.Empty, "已取消更新預算 Excel。", null);
                 }
 
-                CurrentExcelPath = workbookPath;
+                LinkWorkbookToActiveDrawing(workbookPath);
                 List<QtoSyncRow> rows = BuildCurrentDrawingRows();
                 QtoValidationResult validation = ValidateCurrentDrawing();
                 List<QtoSyncLogRow> logs = new List<QtoSyncLogRow>();
@@ -260,6 +291,7 @@ namespace QtoWirePlugin
         {
             try
             {
+                RestoreWorkbookPathForActiveDrawing();
                 if (string.IsNullOrWhiteSpace(CurrentExcelPath) || !System.IO.File.Exists(CurrentExcelPath))
                 {
                     return Ok("尚未選擇可開啟的 Excel 檔案。", 0);
@@ -279,6 +311,44 @@ namespace QtoWirePlugin
             catch (Exception ex)
             {
                 return Fail("開啟 Excel 失敗。", ex);
+            }
+        }
+
+        public static string RestoreWorkbookPathForActiveDrawing()
+        {
+            Document document = AcApplication.DocumentManager.MdiActiveDocument;
+            string identity = GetDocumentIdentity(document);
+            if (string.Equals(identity, currentExcelDrawingIdentity, StringComparison.OrdinalIgnoreCase))
+            {
+                return currentExcelPath ?? string.Empty;
+            }
+
+            currentExcelDrawingIdentity = identity;
+            currentExcelPath = document == null
+                ? string.Empty
+                : QtoProjectCatalogContext.GetConfiguredWorkbookPath(document.Database);
+            return currentExcelPath ?? string.Empty;
+        }
+
+        public static void LinkWorkbookToActiveDrawing(string workbookPath)
+        {
+            Document document = AcApplication.DocumentManager.MdiActiveDocument;
+            currentExcelPath = workbookPath ?? string.Empty;
+            currentExcelDrawingIdentity = GetDocumentIdentity(document);
+            if (document != null && !string.IsNullOrWhiteSpace(workbookPath))
+            {
+                QtoProjectCatalogContext.SetWorkbookPath(document.Database, workbookPath);
+            }
+        }
+
+        public static void ClearWorkbookForActiveDrawing()
+        {
+            Document document = AcApplication.DocumentManager.MdiActiveDocument;
+            currentExcelPath = string.Empty;
+            currentExcelDrawingIdentity = GetDocumentIdentity(document);
+            if (document != null)
+            {
+                QtoProjectCatalogContext.ClearWorkbookPath(document.Database);
             }
         }
 
@@ -657,8 +727,8 @@ namespace QtoWirePlugin
         {
             Dictionary<string, string> settings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             settings["同步方向"] = "CAD_TO_EXCEL_WITH_EXCEL_MANUAL_FIELDS";
-            settings["版本"] = "v1.0.0-beta";
-            settings["說明"] = "由 QtoWirePlugin v1.0 Beta 在 CAD 指令完成後自動更新數量，並保留 Excel 人工編修欄位。";
+            settings["版本"] = "v1.0.1";
+            settings["說明"] = "由 QtoWirePlugin v1.0.1 在 CAD 指令完成後自動更新數量，並保留 Excel 人工編修欄位。";
             QtoBudgetLayoutSettingsService.AddTo(settings, layout);
             return settings;
         }

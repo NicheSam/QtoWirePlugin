@@ -12,6 +12,9 @@ release/
 *.bak
 acad.err
 tests/fixtures/qto_installed_beta_report.txt
+**/tests/fixtures/qto_installed_beta_report.txt
+**/tests/fixtures/fixture_seed.dwg
+**/tools/*.scr
 
 .vs/
 .idea/

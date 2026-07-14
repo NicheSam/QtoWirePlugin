@@ -11,6 +11,7 @@ namespace QtoWirePlugin
     {
         private const string RecordKey = "QTO_BUDGET_PROJECT_V1";
         private const int ChunkSize = 240;
+        private static readonly DateTime JsonEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         public static QtoBudgetProjectData Load(Database database)
         {
@@ -110,6 +111,7 @@ namespace QtoWirePlugin
 
         private static string Serialize(QtoBudgetProjectData data)
         {
+            NormalizeDates(data);
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(QtoBudgetProjectData));
             using (MemoryStream stream = new MemoryStream())
             {
@@ -134,8 +136,51 @@ namespace QtoWirePlugin
             if (data.MasterItems == null) data.MasterItems = new List<QtoBudgetMasterItem>();
             if (data.MappingRules == null) data.MappingRules = new List<QtoBudgetMappingRule>();
             if (data.CompanyBindings == null) data.CompanyBindings = new List<QtoProjectBudgetBinding>();
+            if (data.CoverageOverrides == null) data.CoverageOverrides = new List<QtoBudgetCoverageOverride>();
             if (data.SchemaVersion < 1) data.SchemaVersion = 1;
+            NormalizeDates(data);
             return data;
+        }
+
+        private static void NormalizeDates(QtoBudgetProjectData data)
+        {
+            if (data == null) return;
+            data.ImportedAt = NormalizeJsonDate(data.ImportedAt);
+            if (data.MappingRules != null)
+            {
+                foreach (QtoBudgetMappingRule rule in data.MappingRules)
+                {
+                    if (rule != null) rule.UpdatedAt = NormalizeJsonDate(rule.UpdatedAt);
+                }
+            }
+            if (data.CompanyBindings != null)
+            {
+                foreach (QtoProjectBudgetBinding binding in data.CompanyBindings)
+                {
+                    if (binding != null) binding.UpdatedAt = NormalizeJsonDate(binding.UpdatedAt);
+                }
+            }
+            if (data.CoverageOverrides != null)
+            {
+                foreach (QtoBudgetCoverageOverride item in data.CoverageOverrides)
+                {
+                    if (item != null) item.UpdatedAt = NormalizeJsonDate(item.UpdatedAt);
+                }
+            }
+        }
+
+        private static DateTime NormalizeJsonDate(DateTime value)
+        {
+            if (value == DateTime.MinValue || value == DateTime.MaxValue) return JsonEpoch;
+            try
+            {
+                DateTime utc = value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime();
+                return utc < JsonEpoch ? JsonEpoch : utc;
+            }
+            catch (ArgumentException)
+            {
+                return JsonEpoch;
+            }
         }
     }
 }

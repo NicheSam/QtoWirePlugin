@@ -17,6 +17,8 @@ $excelSmokeSource = Join-Path $PSScriptRoot 'QtoExcelSmokeTest.cs'
 $excelSmokeExe = Join-Path $releaseDirectory 'QtoExcelSmokeTest.exe'
 $budgetSmokeSource = Join-Path $PSScriptRoot 'QtoBudgetMappingSmokeTest.cs'
 $budgetSmokeExe = Join-Path $releaseDirectory 'QtoBudgetMappingSmokeTest.exe'
+$completenessSmokeSource = Join-Path $PSScriptRoot 'QtoBudgetCompletenessSmokeTest.cs'
+$completenessSmokeExe = Join-Path $releaseDirectory 'QtoBudgetCompletenessSmokeTest.exe'
 $acdb = 'C:\Program Files\Autodesk\AutoCAD 2023\AcDbMgd.dll'
 $fixtureDwg = Join-Path $root 'tests\fixtures\qto_validation_fixture.dwg'
 $fixtureReport = Join-Path $root 'tests\fixtures\qto_validation_report.txt'
@@ -66,8 +68,8 @@ if ($commandDiff) {
 }
 
 $assemblyInfo = Get-Content -Raw -Encoding utf8 (Join-Path $root 'Properties\AssemblyInfo.cs')
-if ($assemblyInfo -notmatch '1\.0\.0\.0' -or $manifestText -notmatch 'AppVersion="1\.0\.0"') {
-    throw 'Assembly or manifest version is not v1.0.0.'
+if ($assemblyInfo -notmatch '1\.0\.1\.0' -or $manifestText -notmatch 'AppVersion="1\.0\.1"') {
+    throw 'Assembly or manifest version is not v1.0.1.'
 }
 
 $dictionaryRoot = Join-Path $root 'QtoWirePlugin_v1.0.bundle\m2_m4_shared_dictionary'
@@ -78,7 +80,7 @@ foreach ($required in @('system_codes.csv', 'equipment_types.csv', 'cad_block_ma
 }
 
 $bundleDll = Join-Path $root 'QtoWirePlugin_v1.0.bundle\Contents\Windows\QtoWirePlugin.dll'
-$installerRoot = Join-Path $root 'release\QtoWirePlugin_v1.0.0-beta_installer'
+$installerRoot = Join-Path $root 'release\QtoWirePlugin_v1.0.1_installer'
 $installerDll = Join-Path $installerRoot 'QtoWirePlugin.bundle\Contents\Windows\QtoWirePlugin.dll'
 $installerManifest = Join-Path $installerRoot 'QtoWirePlugin.bundle\PackageContents.xml'
 $installerValidationGuide = Join-Path $installerRoot 'docs\QTO_V1_0_BETA_VALIDATION.md'
@@ -87,7 +89,7 @@ $installerBat = Join-Path $installerRoot 'install_or_update_QtoWirePlugin.bat'
 $installerCheckBat = Join-Path $installerRoot 'check_installation.bat'
 $installerSelfTestBat = Join-Path $installerRoot 'run_plugin_self_test.bat'
 $installerSelfTestScript = Join-Path $installerRoot 'run_installed_self_test.ps1'
-$installerZip = Join-Path $root 'release\QtoWirePlugin_v1.0.0-beta_installer.zip'
+$installerZip = Join-Path $root 'release\QtoWirePlugin_v1.0.1_installer.zip'
 foreach ($requiredPath in @($bundleDll, $installerDll, $installerManifest, $installerValidationGuide, $installerSecondPcChecklist, $installerBat, $installerCheckBat, $installerSelfTestBat, $installerSelfTestScript, $installerZip)) {
     if (-not (Test-Path -LiteralPath $requiredPath)) { throw "Release artifact is missing: $requiredPath" }
 }
@@ -155,6 +157,11 @@ try {
         $_.FullName -eq 'docs\QTO_V1_0_SECOND_PC_CHECKLIST.md'
     } | Select-Object -First 1
     if ($null -eq $zipSecondPcChecklistEntry) { throw 'Installer ZIP does not contain the second-PC validation checklist.' }
+    $zipUiAuditEntry = $zipArchive.Entries | Where-Object {
+        $_.FullName -eq 'docs/QTO_V1_0_UI_FLOW_AUDIT.md' -or
+        $_.FullName -eq 'docs\QTO_V1_0_UI_FLOW_AUDIT.md'
+    } | Select-Object -First 1
+    if ($null -eq $zipUiAuditEntry) { throw 'Installer ZIP does not contain the UI flow audit.' }
     foreach ($requiredEntry in @('install_or_update_QtoWirePlugin.bat', 'check_installation.bat')) {
         if (-not ($zipArchive.Entries | Where-Object { $_.FullName -eq $requiredEntry } | Select-Object -First 1)) {
             throw "Installer ZIP does not contain $requiredEntry."
@@ -188,8 +195,8 @@ $installerCommands = [regex]::Matches($installerManifestText, '<Command Global="
 if (Compare-Object @($manifestCommands) @($installerCommands)) {
     throw 'Source bundle and installer command manifests do not match.'
 }
-if ($installerManifestText -notmatch 'AppVersion="1\.0\.0"') {
-    throw 'Installer manifest version is not v1.0.0.'
+if ($installerManifestText -notmatch 'AppVersion="1\.0\.1"') {
+    throw 'Installer manifest version is not v1.0.1.'
 }
 
 & $csc /nologo /target:exe /out:$smokeExe /reference:$pluginDll /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll $smokeSource
@@ -206,6 +213,11 @@ if ($LASTEXITCODE -ne 0) { throw 'Excel smoke test compilation failed.' }
 & $excelSmokeExe
 if ($LASTEXITCODE -ne 0) { throw 'Excel smoke test failed.' }
 
+& $csc /nologo /target:exe /out:$completenessSmokeExe /reference:$pluginDll /reference:$acdb /reference:System.dll /reference:System.Core.dll $completenessSmokeSource
+if ($LASTEXITCODE -ne 0) { throw 'Budget completeness smoke compile failed.' }
+& $completenessSmokeExe
+if ($LASTEXITCODE -ne 0) { throw 'Budget completeness smoke failed.' }
+
 if (-not [string]::IsNullOrWhiteSpace($BudgetSamplePath)) {
     if (-not (Test-Path -LiteralPath $BudgetSamplePath)) { throw "Budget sample does not exist: $BudgetSamplePath" }
     & $csc /nologo /target:exe /out:$budgetSmokeExe /reference:$pluginDll /reference:$acdb /reference:System.dll /reference:System.Core.dll $budgetSmokeSource
@@ -214,4 +226,4 @@ if (-not [string]::IsNullOrWhiteSpace($BudgetSamplePath)) {
     if ($LASTEXITCODE -ne 0) { throw 'Budget mapping smoke failed.' }
 }
 
-Write-Host "Validation passed. Commands=$($sourceCommands.Count); Version=1.0.0-beta"
+Write-Host "Validation passed. Commands=$($sourceCommands.Count); Version=1.0.1"

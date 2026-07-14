@@ -8,7 +8,7 @@ QtoWirePlugin 是 AutoCAD 2023 使用的弱電 QTO 外掛，用於弱電設計�
 
 | 版本 | 資料夾 | 目標環境 | 狀態 |
 | --- | --- | --- | --- |
-| v1.0.0-beta | `v1.0/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 目前預發行版 |
+| v1.0.1 | `v1.0/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 目前版本 |
 | v0.8.2 | `v0.8/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 前一版 |
 | v0.7 | `v0.7/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 舊版 |
 | v0.6 | `v0.6/` | AutoCAD 2023、Win64、.NET Framework 4.8 | 舊版 |
@@ -20,8 +20,8 @@ QtoWirePlugin 是 AutoCAD 2023 使用的弱電 QTO 外掛，用於弱電設計�
 
 請到 GitHub Releases 下載：
 
-- [QtoWirePlugin v1.0.0-beta Release](https://github.com/NicheSam/QtoWirePlugin/releases/tag/v1.0.0-beta)
-- [QtoWirePlugin_v1.0.0-beta_installer.zip](https://github.com/NicheSam/QtoWirePlugin/releases/download/v1.0.0-beta/QtoWirePlugin_v1.0.0-beta_installer.zip)
+- [QtoWirePlugin v1.0.1 Release](https://github.com/NicheSam/QtoWirePlugin/releases/tag/v1.0.1)
+- [QtoWirePlugin_v1.0.1_installer.zip](https://github.com/NicheSam/QtoWirePlugin/releases/download/v1.0.1/QtoWirePlugin_v1.0.1_installer.zip)
 
 下載後解壓縮，先完全關閉 AutoCAD，再執行：
 
@@ -31,7 +31,12 @@ install_or_update_QtoWirePlugin.bat
 
 安裝後可執行 `run_plugin_self_test.bat`，確認 AutoCAD Core、外掛 DLL 與主要 QTO 規則是否正常。
 
-## v1.0.0 Beta 主要新增
+## v1.0.1 主要能力
+
+- `案件設定`集中確認本 DWG 的圖塊資料庫、預算 Excel、正式預算、mapping、樓層／系統框與同步狀態。
+- 每張 DWG 保存自己的 Excel 連結；開啟圖面不會自動建立或打開 Excel。
+- `預算完整性`檢查 CAD 有而預算未對應、預算無 CAD 來源、待確認規則、失效目標、單位衝突與重複 mapping。
+- 預算無 CAD 來源的品項可多選標記為人工估算、固定數量或不適用，結果保存於 DWG。
 
 - 匯入既有預算 Excel，保留原始工作表並建立穩定預算階層主檔。
 - 支援一個 CAD 計量群組對應多個預算明細，未確認 mapping 不納入正式合計。
@@ -43,7 +48,7 @@ install_or_update_QtoWirePlugin.bat
 - Excel 新增 `系統摘要`；技術原始資料與同步資料維持隱藏。
 - 內附自我測試，可檢查主要規則、關聯資料與 2,000 筆合成資料效能。
 
-本版為預發行版。合成測試與範例預算驗證已通過，但正式 `v1.0.0` 前仍需要真實案件與第二台電腦完成使用驗收。
+v1.0.1 已通過 Release 建置、catalog、Excel、預算完整性與崇德範例預算 smoke test；真實大型案件與第二台電腦仍需持續驗收。
 
 ## 專案結構
 
@@ -88,4 +93,4 @@ QtoWirePlugin/
 
 ## English Summary
 
-QtoWirePlugin is an AutoCAD 2023 .NET plug-in for weak-current CAD quantity takeoff. The v1.0.0 beta adds budget hierarchy import, controlled one-to-many budget mapping, company mapping profiles, standard block updates, drawing tools, review workflows, and event-driven CAD-to-Excel budget draft synchronization.
+QtoWirePlugin is an AutoCAD 2023 .NET plug-in for weak-current CAD quantity takeoff. Version 1.0.1 adds per-DWG project setup, explicit Excel linking, budget coverage checks, controlled one-to-many budget mapping, standard block updates, review workflows, and event-driven CAD-to-Excel budget draft synchronization.

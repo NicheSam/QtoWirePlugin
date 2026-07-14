@@ -102,11 +102,12 @@ namespace QtoWirePlugin
             bool drawingToolsWriteQto = ValidateDrawingTools(document.Database);
             bool reviewSelectedRepair = ValidateSelectedReviewRepair(document.Database);
             bool reviewRelationshipChecks = ValidateReviewRelationshipChecks();
+            bool budgetStoreRoundTrip = ValidateBudgetStoreRoundTrip(document.Database);
             int largeFixtureCount;
             long largeRowsMilliseconds;
             long largeReviewMilliseconds;
             bool largePerformance = ValidateLargeDrawingPerformance(document.Database, out largeFixtureCount, out largeRowsMilliseconds, out largeReviewMilliseconds);
-            bool passed = rows.Count == 20 && informationCount == 12 && cctvCount == 8 && selectedScopePreserved && scopeKindsIndependent && blockUpdatePreserved && drawingToolsWriteQto && reviewSelectedRepair && reviewRelationshipChecks && largePerformance && scopeResult.ErrorCount == 0;
+            bool passed = rows.Count == 20 && informationCount == 12 && cctvCount == 8 && selectedScopePreserved && scopeKindsIndependent && blockUpdatePreserved && drawingToolsWriteQto && reviewSelectedRepair && reviewRelationshipChecks && budgetStoreRoundTrip && largePerformance && scopeResult.ErrorCount == 0;
             StringBuilder report = new StringBuilder();
             report.AppendLine("Status=" + (passed ? "PASS" : "FAIL"));
             report.AppendLine("QtoRows=" + rows.Count);
@@ -122,6 +123,7 @@ namespace QtoWirePlugin
             report.AppendLine("DrawingToolsWriteQto=" + drawingToolsWriteQto);
             report.AppendLine("ReviewSelectedRepair=" + reviewSelectedRepair);
             report.AppendLine("ReviewRelationshipChecks=" + reviewRelationshipChecks);
+            report.AppendLine("BudgetStoreRoundTrip=" + budgetStoreRoundTrip);
             report.AppendLine("LargeFixtureCount=" + largeFixtureCount);
             report.AppendLine("LargeRowsMs=" + largeRowsMilliseconds);
             report.AppendLine("LargeReviewMs=" + largeReviewMilliseconds);
@@ -130,6 +132,20 @@ namespace QtoWirePlugin
             if (!string.IsNullOrWhiteSpace(output)) File.WriteAllText(output, report.ToString(), new UTF8Encoding(false));
             document.Editor.WriteMessage("\n" + report.ToString());
             if (!passed) throw new InvalidOperationException("QTO validation fixture result did not match the expected counts.");
+        }
+
+        private static bool ValidateBudgetStoreRoundTrip(Database database)
+        {
+            QtoBudgetProjectData project = new QtoBudgetProjectData { SchemaVersion = 1 };
+            project.MappingRules.Add(new QtoBudgetMappingRule { RuleId = "EMPTY-DATE-RULE", Status = "candidate" });
+            project.CompanyBindings.Add(new QtoProjectBudgetBinding { CompanyBudgetItemId = "COMPANY-1", ProjectBudgetItemId = "PROJECT-1", Status = "candidate" });
+            QtoBudgetProjectStore.Save(database, project);
+            QtoBudgetProjectData loaded = QtoBudgetProjectStore.Load(database);
+            return loaded.ImportedAt > DateTime.MinValue
+                && loaded.MappingRules.Count == 1
+                && loaded.MappingRules[0].UpdatedAt > DateTime.MinValue
+                && loaded.CompanyBindings.Count == 1
+                && loaded.CompanyBindings[0].UpdatedAt > DateTime.MinValue;
         }
 
         private static bool ValidateReviewRelationshipChecks()

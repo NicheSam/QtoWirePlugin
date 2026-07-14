@@ -149,7 +149,7 @@ namespace QtoWirePlugin
                 budgetWorksheet,
                 CreateSummaryWorksheet(syncRows),
                 CreateQuantityMatrixWorksheet(syncRows),
-                CreateReviewWorksheet(hasBudgetMaster ? MergeMappedBudgetReviewItems(reviewItems, mappedRows) : MergeBudgetReviewItems(reviewItems, budgetDraft.ReviewRows)),
+                CreateReviewWorksheet(hasBudgetMaster ? MergeBudgetCompletenessReviewItems(reviewItems, syncRows, budgetProject) : MergeBudgetReviewItems(reviewItems, budgetDraft.ReviewRows)),
                 CreateLiveWorksheet(syncRows),
                 CreateSyncDataWorksheet(syncRows),
                 CreateLogWorksheet(logRows),
@@ -678,7 +678,7 @@ namespace QtoWirePlugin
         private static QtoWorksheetData CreateSettingsWorksheet(IDictionary<string, string> settings, string workbookPath, BudgetDraftBuildResult budgetDraft)
         {
             Dictionary<string, string> merged = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            merged["WorkbookVersion"] = "v1.0.0-beta";
+            merged["WorkbookVersion"] = "v1.0.1";
             merged["SyncDirection"] = "CAD_TO_EXCEL_WITH_EXCEL_MANUAL_FIELDS";
             merged["ExcelToCadEnabled"] = "false";
             merged["WorkbookPath"] = workbookPath;
@@ -932,22 +932,23 @@ namespace QtoWirePlugin
             return items;
         }
 
-        private static IList<QtoReviewItem> MergeMappedBudgetReviewItems(IList<QtoReviewItem> originalItems, IList<QtoMappedBudgetRow> mappedRows)
+        private static IList<QtoReviewItem> MergeBudgetCompletenessReviewItems(
+            IList<QtoReviewItem> originalItems,
+            IList<QtoSyncRow> syncRows,
+            QtoBudgetProjectData budgetProject)
         {
             List<QtoReviewItem> items = originalItems == null ? new List<QtoReviewItem>() : new List<QtoReviewItem>(originalItems);
-            int index = 0;
-            foreach (QtoMappedBudgetRow row in mappedRows.Where(r => r.MasterItem.RowType == QtoBudgetRowType.Detail && r.MappingStatus != "confirmed"))
+            IList<QtoReviewItem> completenessItems = QtoBudgetCompletenessService.ToReviewItems(
+                QtoBudgetCompletenessService.Analyze(syncRows, budgetProject));
+            foreach (QtoReviewItem item in completenessItems)
             {
-                index++;
-                items.Add(new QtoReviewItem
+                bool exists = items.Any(existing =>
+                    string.Equals(existing.IssueType, item.IssueType, StringComparison.OrdinalIgnoreCase)
+                    && string.Equals(existing.TechnicalDetail, item.TechnicalDetail, StringComparison.OrdinalIgnoreCase));
+                if (!exists)
                 {
-                    ReviewId = "FORMAL-BUDGET-" + index.ToString("000", CultureInfo.InvariantCulture),
-                    Status = "待處理", Severity = "warning", IssueType = "BudgetMappingNeedsReview", Category = "budget",
-                    UserMessage = "正式預算明細尚未建立已確認 mapping。",
-                    SuggestedAction = "請開啟『預算對應』，選擇 CAD 計量群組與正式預算明細後確認規則。",
-                    TechnicalDetail = "BudgetItemId=" + row.MasterItem.BudgetItemId + "; Source=" + row.MasterItem.SourceSheet + "!" + row.MasterItem.SourceRow,
-                    EquipmentTypeName = row.MasterItem.ItemName
-                });
+                    items.Add(item);
+                }
             }
             return items;
         }
