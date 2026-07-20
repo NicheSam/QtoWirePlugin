@@ -34,7 +34,7 @@ namespace QtoWirePlugin
         {
             if (!TryCreateRibbon())
             {
-                WriteStatusMessage("\nQtoWirePlugin V1.0 Beta ribbon is not ready. It will be created automatically when AutoCAD finishes loading.");
+                WriteStatusMessage("\nQtoWirePlugin V1.0.1 ribbon is not ready. It will be created automatically when AutoCAD finishes loading.");
                 CreateRibbonWhenReady();
             }
         }
@@ -72,7 +72,7 @@ namespace QtoWirePlugin
             if (ribbonCreateAttempts >= 60)
             {
                 StopRibbonCreateTimer();
-                WriteStatusMessage("\nQtoWirePlugin V1.0 Beta could not create the ribbon. Run QTO_SHOW_UI after AutoCAD finishes loading.");
+                WriteStatusMessage("\nQtoWirePlugin V1.0.1 could not create the ribbon. Run QTO_SHOW_UI after AutoCAD finishes loading.");
             }
         }
 

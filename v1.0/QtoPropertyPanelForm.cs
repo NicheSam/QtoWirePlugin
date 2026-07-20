@@ -38,7 +38,7 @@ namespace QtoWirePlugin
         {
             this.dictionary = dictionary ?? new QtoDictionaryStore();
             currentSelectionObjectIds = new ObjectId[0];
-            Text = "QTO v1.0 Beta 屬性面板";
+            Text = "QTO v1.0.1 屬性面板";
             Width = 390;
             Height = 820;
             MinimumSize = new Size(340, 560);

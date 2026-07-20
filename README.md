@@ -31,6 +31,14 @@ install_or_update_QtoWirePlugin.bat
 
 安裝後可執行 `run_plugin_self_test.bat`，確認 AutoCAD Core、外掛 DLL 與主要 QTO 規則是否正常。
 
+## 設計人員操作手冊
+
+一般弱電設計人員請先閱讀 [QTO v1.0.1 弱電設計人員操作手冊](v1.0/docs/QTO_v1.0.1_designer_user_guide.html)。內容包含日常工作流程、Ribbon 圖示、34 個按鈕的用途與連動、QTO 屬性、圖塊庫、樓層／系統框、Excel 預算整理、Review 與維護方式。
+
+- [HTML 互動閱讀版](v1.0/docs/QTO_v1.0.1_designer_user_guide.html)
+- [Word 可編輯版](v1.0/docs/QTO_v1.0.1_designer_user_guide.docx)
+- [PDF 列印分享版](v1.0/docs/QTO_v1.0.1_designer_user_guide.pdf)
+
 ## v1.0.1 主要能力
 
 - `案件設定`集中確認本 DWG 的圖塊資料庫、預算 Excel、正式預算、mapping、樓層／系統框與同步狀態。

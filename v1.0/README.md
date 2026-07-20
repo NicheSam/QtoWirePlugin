@@ -2,6 +2,15 @@
 
 QtoWirePlugin 是 AutoCAD 2023 / Win64 使用的弱電 QTO 外掛。v1.0.1 在既有繪圖、圖塊、Review 與 Excel 同步能力上，補上案件初始化與預算完整性檢查流程。
 
+## 設計人員操作手冊
+
+一般弱電設計人員請先閱讀 [QTO v1.0.1 弱電設計人員操作手冊（HTML）](docs/QTO_v1.0.1_designer_user_guide.html)。文件以日常工作流程、Ribbon 圖示、按鈕連動、Excel 預算整理與維護方式為主，不需要程式或資料庫背景。
+
+可離線轉交與列印的版本：
+
+- [Word 版本](docs/QTO_v1.0.1_designer_user_guide.docx)
+- [PDF 版本](docs/QTO_v1.0.1_designer_user_guide.pdf)
+
 ## v1.0.1 重點
 
 - 新增 `案件設定`：集中查看本 DWG 的圖塊資料庫、預算 Excel、正式預算、mapping、樓層／系統框與自動同步狀態。

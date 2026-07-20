@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QtoWirePlugin v1.0.1 弱電設計人員操作手冊</title>
+  <style>
+    @page { size: A4; margin: 16mm 15mm 17mm; }
+    :root {
+      --ink: #172033;
+      --muted: #5d6677;
+      --line: #cfd6df;
+      --soft: #f4f6f8;
+      --blue: #0969b8;
+      --blue-soft: #eaf4ff;
+      --green: #0d7a53;
+      --green-soft: #e9f7f1;
+      --amber: #9c5a00;
+      --amber-soft: #fff4df;
+      --red: #b42318;
+      --red-soft: #fff0ef;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Microsoft JhengHei", "Noto Sans TC", Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.72;
+      background: #e9edf2;
+    }
+    main { width: min(1120px, 100%); margin: 0 auto; background: #fff; min-height: 100vh; }
+    .cover {
+      min-height: 92vh;
+      padding: 50mm 18mm 22mm;
+      border-top: 12px solid var(--blue);
+      background: #fff;
+      position: relative;
+    }
+    .cover .kicker { color: var(--blue); font-weight: 700; font-size: 12pt; }
+    .cover h1 { font-size: 30pt; line-height: 1.25; margin: 8mm 0 5mm; letter-spacing: 0; }
+    .cover .subtitle { max-width: 760px; color: var(--muted); font-size: 14pt; }
+    .cover .meta { position: absolute; left: 18mm; right: 18mm; bottom: 22mm; border-top: 1px solid var(--line); padding-top: 5mm; }
+    .content { padding: 15mm 17mm 22mm; }
+    h1, h2, h3, h4 { page-break-after: avoid; letter-spacing: 0; }
+    h2 { font-size: 20pt; margin: 16mm 0 5mm; padding-bottom: 2.5mm; border-bottom: 2px solid var(--blue); }
+    h3 { font-size: 14pt; margin: 9mm 0 3mm; color: #153f67; }
+    h4 { font-size: 11.5pt; margin: 5mm 0 2mm; }
+    p { margin: 0 0 3mm; }
+    ul, ol { margin: 2mm 0 4mm; padding-left: 7mm; }
+    li { margin: 1mm 0; }
+    code { font-family: Consolas, monospace; font-size: 9.5pt; background: var(--soft); padding: 0 1mm; }
+    a { color: var(--blue); text-decoration: none; }
+    table { width: 100%; border-collapse: collapse; margin: 3mm 0 6mm; page-break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { page-break-inside: avoid; }
+    th, td { border: 1px solid var(--line); padding: 2.5mm 2.8mm; vertical-align: top; }
+    th { background: #e9eef4; text-align: left; font-weight: 700; }
+    .tight th, .tight td { padding: 1.8mm 2mm; }
+    .icon { width: 13mm; height: 13mm; object-fit: contain; background: #263544; padding: 1mm; }
+    .button-name { font-weight: 700; white-space: nowrap; }
+    .cmd { display: block; color: var(--muted); font: 8.5pt Consolas, monospace; margin-top: 1mm; }
+    .callout { border-left: 4px solid var(--blue); background: var(--blue-soft); padding: 3.5mm 4mm; margin: 4mm 0; page-break-inside: avoid; }
+    .callout.good { border-color: var(--green); background: var(--green-soft); }
+    .callout.warn { border-color: #df8500; background: var(--amber-soft); }
+    .callout.danger { border-color: var(--red); background: var(--red-soft); }
+    .tag { display: inline-block; border: 1px solid var(--line); background: #fff; padding: .4mm 1.8mm; margin: 0 1mm 1mm 0; font-size: 8.5pt; }
+    .step-table td:first-child { width: 13mm; text-align: center; font-size: 16pt; font-weight: 700; color: var(--blue); }
+    .figure { margin: 5mm 0 7mm; page-break-inside: avoid; }
+    .figure img { display: block; max-width: 100%; border: 1px solid var(--line); }
+    .figure figcaption { color: var(--muted); font-size: 9pt; margin-top: 1.5mm; }
+    .flow { border: 1px solid var(--line); margin: 4mm 0 7mm; }
+    .flow td { text-align: center; vertical-align: middle; }
+    .flow .arrow { width: 9mm; border-left: 0; border-right: 0; font-size: 16pt; color: var(--blue); }
+    .flow .phase { background: var(--blue-soft); font-weight: 700; }
+    .toc { columns: 2; column-gap: 12mm; }
+    .toc a { display: block; margin-bottom: 1.5mm; break-inside: avoid; }
+    .ribbon-map td { text-align: center; background: #293849; color: #fff; }
+    .ribbon-map th { text-align: center; background: #1e2b39; color: #fff; }
+    .ribbon-map img { width: 10mm; height: 10mm; display: block; margin: 0 auto 1mm; }
+    .small { font-size: 9pt; color: var(--muted); }
+    .page-break { page-break-before: always; }
+    .checklist { list-style: none; padding-left: 0; }
+    .checklist li::before { content: "□"; margin-right: 2mm; color: var(--blue); }
+    .do-dont td:first-child { width: 50%; }
+    @media print {
+      body { background: #fff; }
+      main { width: auto; }
+      .cover { min-height: 260mm; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <section class="cover">
+    <div class="kicker">設計人員版操作文件</div>
+    <h1>QtoWirePlugin v1.0.1<br>弱電設計人員操作手冊</h1>
+    <p class="subtitle">從一般 AutoCAD 繪圖，轉為「邊畫、邊整理數量、邊準備預算」的工作方式。內容以實際工作情境、圖示與操作順序說明，不要求讀者理解程式、資料庫或 XData。</p>
+    <div class="callout good" style="max-width:760px;margin-top:14mm">
+      <strong>這份手冊回答五件事：</strong>什麼時候用外掛、要按哪個圖示、按下去會發生什麼、下一步接哪個功能，以及專案與公司資料要怎麼維護。
+    </div>
+    <div class="meta">
+      <strong>適用版本：</strong>QtoWirePlugin v1.0.1　｜　<strong>適用軟體：</strong>AutoCAD 2023 / Win64<br>
+      <strong>主要對象：</strong>弱電設計、CAD 配置、數量估算、預算整理人員　｜　<strong>文件狀態：</strong>第一版
+    </div>
+  </section>
+
+  <div class="content">
+    <section id="read-first">
+      <h2>先看這一頁：外掛到底改變了什麼</h2>
+      <p>一般 AutoCAD 只知道「這裡有一個圖塊、一條線、它在某個圖層」。QTO 外掛會在不改變原本幾何畫法的前提下，替需要計量的圖塊或線條加上工作資訊，例如：它是什麼設備、屬於哪個系統、在哪一層、用什麼線材、數量怎麼算、最後對應到哪個預算品項。</p>
+
+      <table>
+        <thead><tr><th>一般 AutoCAD</th><th>加入 QTO 後</th></tr></thead>
+        <tbody>
+          <tr><td>看到圖形、圖層、圖塊名稱。</td><td>仍看同一張圖，但可另外知道設備類型、系統、樓層、線材、數量依據與預算對應。</td></tr>
+          <tr><td>複製圖塊後，通常還要人工重算數量。</td><td>有 QTO 資訊的物件被新增、刪除或複製後，可在 CAD 指令結束時重新整理數量。</td></tr>
+          <tr><td>樓層、系統常靠圖層名稱或人工記憶。</td><td>可用樓層框、系統框批次套用；兩種框重疊處會同時得到樓層與系統。</td></tr>
+          <tr><td>預算表與圖面分開維護，改圖後容易漏改。</td><td>CAD 是數量來源；Excel 保留單價、備註等人工內容，數量可由 CAD 更新。</td></tr>
+          <tr><td>漏列預算通常靠經驗逐項找。</td><td>完整性檢查會列出「CAD 有、預算無」與「預算有、CAD 無」等缺口。</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout warn"><strong>它不是 Revit，也不是自動設計系統。</strong>外掛不會自行判斷設備該放哪裡、不會替你完成專業設計，也不會把候選 mapping 當成正式預算。設計判斷仍由人員負責；外掛負責減少重複輸入、重算與漏項。</div>
+
+      <table class="flow">
+        <tr>
+          <td class="phase">原本做法</td><td>畫 CAD</td><td class="arrow">→</td><td>逐層查數量</td><td class="arrow">→</td><td>另開 Excel</td><td class="arrow">→</td><td>改圖再重算</td>
+        </tr>
+        <tr>
+          <td class="phase">QTO 做法</td><td>畫有資料的 CAD</td><td class="arrow">→</td><td>自動彙整</td><td class="arrow">→</td><td>對應預算</td><td class="arrow">→</td><td>改圖後更新數量</td>
+        </tr>
+      </table>
+    </section>
+
+    <section id="toc">
+      <h2>目錄與建議閱讀方式</h2>
+      <div class="toc">
+        <a href="#concept">1. 先建立正確觀念</a>
+        <a href="#screen">2. 認識 Ribbon 與圖示</a>
+        <a href="#quickstart">3. 新案件第一次怎麼做</a>
+        <a href="#daily">4. 平常繪圖怎麼用</a>
+        <a href="#budget">5. 預算與 Excel 怎麼用</a>
+        <a href="#review">6. 檢查問題與修復</a>
+        <a href="#scenarios">7. 常見工作情境</a>
+        <a href="#buttons">8. 34 個 Ribbon 按鈕圖解</a>
+        <a href="#windows">9. 主要視窗操作</a>
+        <a href="#maintenance">10. 日常維護與公司管理</a>
+        <a href="#troubleshooting">11. 常見問題排除</a>
+        <a href="#checklists">12. 工作前後檢查表</a>
+      </div>
+      <p class="small">第一次使用：先讀第 1～5 章。查某個圖示：直接看第 8 章。公司管理者：再讀第 10 章。</p>
+    </section>
+
+    <section id="concept">
+      <h2>1. 先建立正確觀念</h2>
+      <h3>1.1 哪些物件會被 QTO 管理</h3>
+      <p>只有已經有 QTO 資訊的圖塊、線條或聚合線才會進入計量。普通建築底圖、文字、尺寸、未標註的圖塊不會因為落在範圍框內就自動變成 QTO 物件。</p>
+      <table class="tight">
+        <thead><tr><th>圖面物件</th><th>常見 QTO 身分</th><th>常見數量方式</th></tr></thead>
+        <tbody>
+          <tr><td>設備／插座圖塊</td><td>設備、出線口、箱體、盤箱</td><td>點位數量</td></tr>
+          <tr><td>配線 Polyline</td><td>配線</td><td>實際長度</td></tr>
+          <tr><td>管段／線槽 Polyline</td><td>管段、線槽</td><td>實際長度</td></tr>
+          <tr><td>範圍 Polyline</td><td>樓層框、系統框</td><td>不計量，只套用屬性</td></tr>
+        </tbody>
+      </table>
+
+      <h3>1.2 設計人員真正需要理解的資料</h3>
+      <table>
+        <thead><tr><th>畫面欄位</th><th>白話意思</th><th>何時要確認</th></tr></thead>
+        <tbody>
+          <tr><td><strong>設備類型</strong></td><td>這個東西實際上是什麼，例如攝影機、資訊插座、讀卡機。</td><td>插入、轉換舊圖或準備預算前。</td></tr>
+          <tr><td><strong>CAD 計量型態</strong></td><td>在 CAD 裡要把它當「點、線、箱體、線槽或盤箱」哪一類來算。</td><td>決定數量方式時。</td></tr>
+          <tr><td><strong>系統代碼</strong></td><td>它屬於弱電、停管、資訊、TV、CCTV、BA、視聽音響或緊急廣播。</td><td>分類、篩選、預算對應前。</td></tr>
+          <tr><td><strong>線材／管材</strong></td><td>實際使用的線或管，例如 Cat.6、光纖、EMT。</td><td>畫線管或建立預算組合前。</td></tr>
+          <tr><td><strong>樓層／區域／空間</strong></td><td>物件位於哪一層、哪個區域、哪個房間。</td><td>需要樓層統計或會議查量時。</td></tr>
+          <tr><td><strong>數量依據／單位</strong></td><td>按點算、按長度算，單位是點、只、組或公尺。</td><td>輸出數量與 mapping 前。</td></tr>
+          <tr><td><strong>對應狀態</strong></td><td>目前只是候選、需要確認、被阻擋，或已確認。</td><td>正式納入預算草稿前。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>1.3 CAD、Excel、圖塊庫各自負責什麼</h3>
+      <table>
+        <thead><tr><th>資料位置</th><th>主要負責內容</th><th>不要拿來做什麼</th></tr></thead>
+        <tbody>
+          <tr><td><strong>專案 DWG</strong></td><td>幾何、數量來源、QTO 屬性、樓層／系統框、案件 mapping、連結的 Excel 路徑。</td><td>不要把它當公司共用預算主檔。</td></tr>
+          <tr><td><strong>預算 Excel</strong></td><td>預算草稿、數量統整、人工單價、倍數、廠牌、備註與確認狀態。</td><td>不反向修改 CAD 幾何與設備屬性。</td></tr>
+          <tr><td><strong>標準圖例 DWG</strong></td><td>公司標準圖塊與預設 QTO 分類的來源。</td><td>一般使用者不必手動維護背景 JSON。</td></tr>
+          <tr><td><strong>公司預算規則庫</strong></td><td>跨案件可重複使用、已確認的品項對應規則。</td><td>案件內確認後不會自動污染公司規則。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="screen" class="page-break">
+      <h2>2. 認識 Ribbon 與圖示</h2>
+      <p>AutoCAD 上方會出現 <strong>QTO 弱電計算</strong> 頁籤。Ribbon 是高頻入口；需要搜尋、多選、預覽或確認的工作會再開獨立視窗。</p>
+
+      <table class="ribbon-map tight">
+        <thead><tr><th>流程</th><th>圖塊庫</th><th>快速繪圖</th><th>Excel 同步</th><th>樓層／系統</th><th>預算前置</th></tr></thead>
+        <tbody><tr>
+          <td><img src="user-guide-assets/qto_project_setup.png">案件設定<br><img src="user-guide-assets/qto_workflow_panel.png">操作面板<br><img src="user-guide-assets/qto_create_connections.png">一鍵連接</td>
+          <td><img src="user-guide-assets/qto_insert_catalog_block.png">插入圖塊<br><img src="user-guide-assets/qto_block_library_manager.png">管理圖塊庫<br><img src="user-guide-assets/qto_update_project_blocks.png">更新專案圖塊</td>
+          <td><img src="user-guide-assets/qto_place_catalog_continuous.png">連續放置設備<br><img src="user-guide-assets/qto_draw_qto_path.png">繪製線管<br><img src="user-guide-assets/qto_convert_legacy_objects.png">轉換舊物件</td>
+          <td><img src="user-guide-assets/qto_panel.png">同步主控<br><img src="user-guide-assets/qto_sync_full_rebuild.png">重整 Excel<br><img src="user-guide-assets/qto_validate.png">檢查修復</td>
+          <td><img src="user-guide-assets/qto_scope_define_floor.png">樓層框<br><img src="user-guide-assets/qto_scope_define_system.png">系統框<br><img src="user-guide-assets/qto_scope_clear.png">清除框線</td>
+          <td><img src="user-guide-assets/qto_property_panel.png">屬性面板<br><img src="user-guide-assets/qto_budget_mapping.png">預算對應<br><img src="user-guide-assets/qto_budget_completeness.png">完整性檢查</td>
+        </tr></tbody>
+      </table>
+
+      <table class="ribbon-map tight">
+        <thead><tr><th>出線口</th><th>箱體</th><th>線槽</th><th>報表</th></tr></thead>
+        <tbody><tr>
+          <td><img src="user-guide-assets/qto_mark_outlets.png">標記出線口<br><img src="user-guide-assets/qto_label_outlets.png">編號標註<br><img src="user-guide-assets/qto_callout_to_jb.png">指向箱體<br><img src="user-guide-assets/qto_edit_outlet_properties.png">編輯出線口<br><img src="user-guide-assets/qto_delete_outlet_info.png">刪除出線口</td>
+          <td><img src="user-guide-assets/qto_mark_jb.png">標記箱體<br><img src="user-guide-assets/qto_edit_jb_properties.png">編輯箱體<br><img src="user-guide-assets/qto_delete_jb_info.png">刪除箱體</td>
+          <td><img src="user-guide-assets/qto_mark_tray.png">標記線槽<br><img src="user-guide-assets/qto_batch_route_by_tray.png">批次尋路<br><img src="user-guide-assets/qto_conduit_to_tray.png">管段到線槽<br><img src="user-guide-assets/qto_clear_tray_properties.png">清除線槽屬性</td>
+          <td><img src="user-guide-assets/qto_export_outlets.png">出線口清單<br><img src="user-guide-assets/qto_check_wire.png">配線關係明細<br><img src="user-guide-assets/qto_export_jb_summary.png">線段明細<br><img src="user-guide-assets/qto_export_conduit_summary.png">管段明細</td>
+        </tr></tbody>
+      </table>
+
+      <h3>2.1 圖示的共通語言</h3>
+      <table class="tight">
+        <thead><tr><th>圖示特徵</th><th>代表意思</th></tr></thead>
+        <tbody>
+          <tr><td>藍色圓點與立線</td><td>出線口或點位。</td></tr>
+          <tr><td>橘色方框</td><td>箱體、盤箱或接線箱。</td></tr>
+          <tr><td>折線／路徑</td><td>配線、管段、線槽或連接。</td></tr>
+          <tr><td>紙張與水平線</td><td>清單、檢查或匯出報表。</td></tr>
+          <tr><td>外框與中心標記</td><td>樓層框、系統框等範圍管理。</td></tr>
+          <tr><td>右上角紅色叉</td><td>清除 QTO 資訊或範圍屬性，不一定刪除 CAD 幾何。</td></tr>
+          <tr><td>右上角橘色點／筆</td><td>標記或編輯。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="quickstart">
+      <h2>3. 新案件第一次怎麼做</h2>
+      <p>以下是一般新案的建議順序。不是每一步都必須第一天完成；<strong>圖塊庫建議先設定，Excel 與正式預算可以等到要估算時再接上。</strong></p>
+      <table class="step-table">
+        <tr><td>1</td><td><strong>開啟案件設定</strong><br>按 <img class="icon" src="user-guide-assets/qto_project_setup.png">「案件設定」，確認目前 DWG、圖塊資料庫、Excel、正式預算、範圍框與同步狀態。</td></tr>
+        <tr><td>2</td><td><strong>選擇標準圖例 DWG</strong><br>若尚未設定圖塊庫，進入「管理圖塊庫」，選擇公司或專案的標準圖例 DWG。一般設計人員不需要自行製作 JSON。</td></tr>
+        <tr><td>3</td><td><strong>建立樓層與系統範圍</strong><br>圖面若按樓層、系統矩陣排列，可先畫封閉 Polyline，再分別按「樓層框」與「系統框」。框只管理樓層或系統其中一項。</td></tr>
+        <tr><td>4</td><td><strong>開始放置設備</strong><br>單次選用「插入圖塊」；大量重複放置用「連續放置設備」。插入後已帶入設備類型、系統與同步 ID。</td></tr>
+        <tr><td>5</td><td><strong>畫配線與管段</strong><br>需要長度計量時用「繪製線管」；既有線段則用「轉換舊物件」。</td></tr>
+        <tr><td>6</td><td><strong>檢查屬性</strong><br>選取物件後用「屬性面板」確認設備類型、計量型態、系統、線材、樓層與數量單位。</td></tr>
+        <tr><td>7</td><td><strong>建立編號與關聯</strong><br>需要時標記出線口／箱體、編號標註、指向箱體或執行一鍵連接。</td></tr>
+        <tr><td>8</td><td><strong>檢查修復</strong><br>在準備估算前按「檢查修復」，先處理缺系統、缺設備類型、重複編號、缺配線等問題。</td></tr>
+        <tr><td>9</td><td><strong>連結 Excel 與正式預算</strong><br>從案件設定或同步主控選擇／建立 Excel，再從「預算對應」匯入正式預算格式。</td></tr>
+        <tr><td>10</td><td><strong>確認 mapping 與完整性</strong><br>一個 CAD 計量群組可對應設備、線材、管材、工資等多個預算品項。完成後執行「完整性檢查」。</td></tr>
+      </table>
+      <div class="callout good"><strong>最小可用起點：</strong>若當天只想畫圖，完成「案件設定 → 圖塊庫 → 放置設備 → 屬性面板」即可。預算與 Excel 不會阻擋繪圖。</div>
+    </section>
+
+    <section id="daily">
+      <h2>4. 平常繪圖怎麼用</h2>
+      <h3>4.1 每天開始工作</h3>
+      <ol>
+        <li>開啟正確 DWG，確認目前案件名稱。</li>
+        <li>若今天要同步預算，開「案件設定」確認 Excel 路徑，再啟用自動同步。</li>
+        <li>若只是繪圖，不需要開 Excel，也不需要每次按「重整 Excel」。</li>
+        <li>開「操作面板」可按工作順序使用，不必在 Ribbon 上來回尋找所有功能。</li>
+      </ol>
+
+      <figure class="figure">
+        <img src="user-guide-assets/workflow-panel.png" alt="QTO 弱電工作流程操作面板">
+        <figcaption>實際介面：操作面板把功能分成「繪圖與連接、整理與檢查、預算與圖塊、報表」四個分頁。新進人員建議先從這裡操作。</figcaption>
+      </figure>
+
+      <h3>4.2 放置設備：單次與連續的差別</h3>
+      <table>
+        <thead><tr><th>情境</th><th>建議按鈕</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>只放一兩個不同設備</td><td>插入圖塊</td><td>可搜尋、預覽，再選原點或圖形中心插入。</td></tr>
+          <tr><td>同一設備連續配置多個房間</td><td>連續放置設備</td><td>圖塊只選一次，可連續指定位置。</td></tr>
+          <tr><td>舊圖已經有大量圖塊</td><td>轉換舊物件</td><td>不必刪掉重畫，只轉換使用者選取的物件。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>4.3 用樓層框、系統框減少重複填寫</h3>
+      <p>樓層框與系統框是兩種不同的封閉範圍。物件在樓層框內只會改樓層；在系統框內只會改系統；位於兩者重疊區才同時取得兩項資訊。</p>
+      <table class="flow">
+        <tr><td class="phase">樓層框：3F</td><td>只套用「樓層＝3F」</td><td class="arrow">＋</td><td class="phase">系統框：CCTV</td><td>只套用「系統＝CCTV」</td></tr>
+        <tr><td colspan="5"><strong>重疊區內的 QTO 物件：樓層＝3F、系統＝CCTV</strong></td></tr>
+      </table>
+      <div class="callout warn">沒有 QTO 資訊的物件會被跳過。這是刻意設計，避免建築底圖或普通圖塊被意外寫入 QTO 資料。</div>
+
+      <h3>4.4 選取、複製、移動後會發生什麼</h3>
+      <ul>
+        <li><strong>選取物件：</strong>屬性面板會顯示該物件資料；多選時只應修改共同欄位。</li>
+        <li><strong>複製 QTO 物件：</strong>外觀與工作屬性可保留，但同步 ID 會重新配發，避免兩個物件被當成同一筆。</li>
+        <li><strong>移入另一個範圍框：</strong>命令完成後，樓層或系統可依新範圍更新。</li>
+        <li><strong>移出所有同類範圍框：</strong>對應的樓層或系統欄位會清空。</li>
+        <li><strong>刪除物件：</strong>下次 Excel 更新時，數量會依圖面現況重新計算。</li>
+      </ul>
+
+      <h3>4.5 屬性面板怎麼看</h3>
+      <figure class="figure">
+        <img src="user-guide-assets/property-panel.png" alt="QTO 屬性面板">
+        <figcaption>實際介面：先挑選或直接在 CAD 選取物件，再查看設備類型、CAD 計量型態、系統、編號、位置、線材與預算狀態。畫面空白表示目前沒有可顯示的 QTO 選取。</figcaption>
+      </figure>
+      <table class="tight">
+        <thead><tr><th>面板按鈕</th><th>作用</th><th>使用提醒</th></tr></thead>
+        <tbody>
+          <tr><td>挑選</td><td>回到 CAD 指定要檢視或編輯的物件。</td><td>多選可批次修改共同欄位。</td></tr>
+          <tr><td>儲存</td><td>把目前欄位寫回選取物件。</td><td>確認設備類型與系統無誤再存。</td></tr>
+          <tr><td>更新</td><td>重新讀取目前選取的資料。</td><td>外部修改後畫面未更新時使用。</td></tr>
+          <tr><td>匯出預算 CSV</td><td>輸出預算前置資料。</td><td>不是正式報價表。</td></tr>
+          <tr><td>未標註</td><td>找出尚未有完整 QTO 資訊的物件。</td><td>用於整理舊圖或估算前檢查。</td></tr>
+          <tr><td>選同類</td><td>依設備類型、計量型態、系統或線材選取相同物件。</td><td>會先跳條件視窗，至少勾一個條件。</td></tr>
+          <tr><td>複製類型</td><td>由既有設備類型複製一份再調整。</td><td>適合相近規格，不等於複製 CAD 圖塊。</td></tr>
+          <tr><td>重新命名</td><td>更改設備類型顯示名稱。</td><td>避免任意改動公司已共用的正式代碼。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="budget" class="page-break">
+      <h2>5. 預算與 Excel 怎麼用</h2>
+      <h3>5.1 正確的角色分工</h3>
+      <p><strong>CAD 是數量來源，Excel 是預算整理工作簿。</strong>設計人員在 CAD 新增、刪除或調整 QTO 物件，Excel 的數量可更新；Excel 裡人工填寫的單價、倍數、廠牌、備註與確認狀態應被保留。</p>
+      <div class="callout danger"><strong>不要期待 Excel 反向改 CAD。</strong>目前版本不允許在 Excel 改設備數量後自動增加或刪除 CAD 物件，也不會由 Excel 修改圖面幾何。</div>
+
+      <h3>5.2 第一次連結 Excel</h3>
+      <ol>
+        <li>按「案件設定」或「同步主控」。</li>
+        <li>選擇既有案件 Excel，或建立新的案件 Excel。</li>
+        <li>確認顯示的路徑屬於目前 DWG，不是另一個案件。</li>
+        <li>需要邊畫邊更新時，再按「啟用自動同步」。</li>
+      </ol>
+      <p>開啟 DWG 本身不會自動建立或開啟 Excel。這可避免只是看圖或修改小地方時，跳出不需要的工作簿。</p>
+
+      <h3>5.3 自動同步與重整 Excel 的差別</h3>
+      <table>
+        <thead><tr><th>功能</th><th>什麼時候用</th><th>會做什麼</th></tr></thead>
+        <tbody>
+          <tr><td><strong>啟用自動同步</strong></td><td>當天會持續改圖並希望 Excel 跟著更新。</td><td>相關 CAD 指令結束後，把多個變更合併成一次更新；不是每 5 秒輪詢。</td></tr>
+          <tr><td><strong>暫停同步</strong></td><td>大量複製、搬移、整理圖面，暫時不希望一直更新 Excel。</td><td>停止自動更新；CAD 可照常操作。</td></tr>
+          <tr><td><strong>重整 Excel</strong></td><td>第一次建立、同步失敗、Excel 忙碌，或改了版面／mapping 規則。</td><td>重新掃描全圖並重建受外掛管理的工作表，保留人工欄位。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>5.4 預算對應的白話理解</h3>
+      <p>CAD 裡的一組設備數量，通常不只對應一個報價品項。例如一個資訊插座可能同時需要面板、模組、線材、管材、施工工資。預算對應就是把「CAD 計量群組」連到一個或多個正式預算明細，並指定數量怎麼算。</p>
+      <table class="flow">
+        <tr><td class="phase">CAD 群組<br>資訊插座 × 25</td><td class="arrow">→</td><td>資訊插座面板 × 25</td><td>Cat.6 配線 × CAD 長度</td><td>配管 × CAD 長度</td><td>工資 × 25</td></tr>
+      </table>
+      <p>可用的受控數量規則包括：原始數量、CAD 長度、固定數量、乘倍數、加耗損率、每樓層一筆、每區域一筆。未確認的候選規則不應納入正式合計。</p>
+
+      <h3>5.5 預算完整性檢查</h3>
+      <table class="tight">
+        <thead><tr><th>檢查分類</th><th>代表意思</th><th>設計人員該做什麼</th></tr></thead>
+        <tbody>
+          <tr><td>CAD 有、預算無</td><td>圖面已有設備或長度，但沒有已確認的預算對應。</td><td>開預算對應，選擇正式品項並確認。</td></tr>
+          <tr><td>預算有、CAD 無</td><td>預算明細目前沒有 CAD 數量來源。</td><td>確認是否漏畫、漏 mapping，或標記人工估算／固定數量／不適用。</td></tr>
+          <tr><td>對應待確認</td><td>只有候選或需人工確認的規則。</td><td>不能直接當正式數量，需人工確認。</td></tr>
+          <tr><td>規則異常</td><td>目標不存在、單位不一致、重複 mapping 或規則被阻擋。</td><td>先修規則，再更新 Excel。</td></tr>
+        </tbody>
+      </table>
+      <div class="callout warn"><strong>完整性通過不代表預算正確。</strong>它只證明目前可被檢查的 CAD 與預算關係沒有明顯缺口；契約範圍、特殊工法、人工估算、施工界面仍需設計與估算人員判斷。</div>
+    </section>
+
+    <section id="review">
+      <h2>6. 檢查問題與修復</h2>
+      <p>「檢查修復」會把同步 ID、屬性缺漏、編號、配線關係、圖塊版本與預算問題整理到同一份清單。清單支援多選，不需要逐筆打開。</p>
+      <figure class="figure">
+        <img src="user-guide-assets/review-list.png" alt="QTO 檢查清單">
+        <figcaption>實際介面：上方可依嚴重性、問題類型與狀態篩選；中間可多選；下方可定位、開屬性、修復選取項目或查看技術資訊。</figcaption>
+      </figure>
+      <h3>6.1 三種嚴重性</h3>
+      <ul>
+        <li><strong>錯誤：</strong>通常會影響同步、數量或關聯，應優先處理。</li>
+        <li><strong>警告：</strong>資料可能不完整或需要判斷，估算前應確認。</li>
+        <li><strong>提醒：</strong>不一定錯，但外掛無法替你判斷。</li>
+      </ul>
+      <h3>6.2 哪些可以自動修，哪些不行</h3>
+      <table class="do-dont">
+        <thead><tr><th>可安全自動處理</th><th>必須人工確認</th></tr></thead>
+        <tbody><tr>
+          <td>缺少或重複的同步 ID，可重新配發。</td>
+          <td>設備類型、系統、線材、數量依據、預算品項、出線口與箱體關聯。</td>
+        </tr></tbody>
+      </table>
+      <p>原因很簡單：同步 ID 是技術識別碼，外掛可確定如何修；但設備屬於哪個系統、要報哪個品項，是設計與估算判斷，外掛不能猜。</p>
+    </section>
+
+    <section id="scenarios">
+      <h2>7. 常見工作情境：遇到什麼需求，按什麼</h2>
+      <table>
+        <thead><tr><th>工作情境</th><th>第一個按鈕</th><th>接著使用</th><th>完成判斷</th></tr></thead>
+        <tbody>
+          <tr><td>新案剛開始畫</td><td>案件設定</td><td>管理圖塊庫 → 樓層框／系統框 → 插入圖塊</td><td>插入物件能在屬性面板看到設備、系統與計量型態。</td></tr>
+          <tr><td>同類設備要放很多個</td><td>連續放置設備</td><td>屬性面板抽查 → 檢查修復</td><td>每個物件有獨立同步 ID，數量正確。</td></tr>
+          <tr><td>接手舊 CAD</td><td>轉換舊物件</td><td>範圍管理 → 選同類 → 屬性面板</td><td>只有選取的舊物件被納入 QTO。</td></tr>
+          <tr><td>整層設備要改樓層</td><td>樓層框</td><td>範圍管理／套用全部</td><td>框內 QTO 物件樓層更新，普通物件不受影響。</td></tr>
+          <tr><td>整區改成 CCTV</td><td>系統框</td><td>完整性檢查或選同類抽查</td><td>框內 QTO 物件系統更新，樓層不被改動。</td></tr>
+          <tr><td>想找漏設 QTO 的物件</td><td>屬性面板</td><td>未標註 → 批次設定／轉換舊物件</td><td>需要計量的物件都有設備類型、計量型態與系統。</td></tr>
+          <tr><td>要依配置圖調整架構</td><td>報表或檢查修復</td><td>出線口清單／配線關係明細</td><td>可看出各設備、箱體與配線關係，再回頭調整架構圖。</td></tr>
+          <tr><td>開始估算</td><td>同步主控</td><td>預算對應 → 完整性檢查 → 重整 Excel</td><td>未確認 mapping 不進正式合計，缺口已有處理。</td></tr>
+          <tr><td>改圖後要更新預算</td><td>啟用自動同步</td><td>必要時重整 Excel</td><td>Excel 數量更新，人工單價與備註保留。</td></tr>
+          <tr><td>公司圖塊有新版</td><td>更新專案圖塊</td><td>差異預覽 → 勾選 → 確認更新</td><td>位置、旋轉、比例、同名屬性與 QTO 資料保留。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="buttons" class="page-break">
+      <h2>8. 34 個 Ribbon 按鈕圖解</h2>
+      <p>以下按 Ribbon 分區列出。表內「連動」表示這個按鈕完成後，最常接著使用的功能或會被更新的資料。</p>
+
+      <h3>8.1 流程</h3>
+      <table class="tight"><thead><tr><th>圖示／按鈕</th><th>用途</th><th>連動與提醒</th></tr></thead><tbody>
+        <tr><td><img class="icon" src="user-guide-assets/qto_project_setup.png"><span class="button-name">案件設定</span><span class="cmd">QTO_PROJECT_SETUP</span></td><td>集中確認本 DWG 的圖塊庫、Excel、正式預算、mapping、樓層／系統框與同步狀態。</td><td>新案建議先開；不會因未設定 Excel 而阻擋繪圖。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_workflow_panel.png"><span class="button-name">操作面板</span><span class="cmd">QTO_WORKFLOW_PANEL</span></td><td>依工作順序整理所有主要功能，適合新人與日常使用。</td><td>內含繪圖、檢查、預算、圖塊與報表入口。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_create_connections.png"><span class="button-name">一鍵連接</span><span class="cmd">QTO_CREATE_CONNECTIONS</span></td><td>依目前選取與既有關係建立出線口、箱體或配線連接。</td><td>使用前先確認出線口、箱體編號與系統；完成後用配線關係明細檢查。</td></tr>
+      </tbody></table>
+
+      <h3>8.2 圖塊庫</h3>
+      <table class="tight"><thead><tr><th>圖示／按鈕</th><th>用途</th><th>連動與提醒</th></tr></thead><tbody>
+        <tr><td><img class="icon" src="user-guide-assets/qto_insert_catalog_block.png"><span class="button-name">插入圖塊</span><span class="cmd">QTO_INSERT_CATALOG_BLOCK</span></td><td>搜尋、預覽標準圖塊，可選依圖塊原點或圖形中心插入。</td><td>插入後自動帶 QTO 預設值；未分類圖塊可能需人工確認。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_block_library_manager.png"><span class="button-name">管理圖塊庫</span><span class="cmd">QTO_BLOCK_LIBRARY_MANAGER</span></td><td>選擇圖例 DWG，整理圖塊顯示名稱、系統、設備類型、計量方式與預設材料。</td><td>一般使用者不編輯 JSON；公司管理人員可批次設定並儲存。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_update_project_blocks.png"><span class="button-name">更新專案圖塊</span><span class="cmd">QTO_UPDATE_PROJECT_BLOCKS</span></td><td>比較專案圖塊與標準庫，先預覽差異再批次更新。</td><td>不會背景自動替換；更新前需勾選確認，衝突項進 Review。</td></tr>
+      </tbody></table>
+
+      <h3>8.3 快速繪圖</h3>
+      <table class="tight"><thead><tr><th>圖示／按鈕</th><th>用途</th><th>連動與提醒</th></tr></thead><tbody>
+        <tr><td><img class="icon" src="user-guide-assets/qto_place_catalog_continuous.png"><span class="button-name">連續放置設備</span><span class="cmd">QTO_PLACE_CATALOG_CONTINUOUS</span></td><td>選一次設備後連續指定多個插入點。</td><td>適合大量同型設備；完成後抽查樓層、系統與同步 ID。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_draw_qto_path.png"><span class="button-name">繪製線管</span><span class="cmd">QTO_DRAW_QTO_PATH</span></td><td>直接繪製配線、管段或線槽，完成時寫入長度與材料資料。</td><td>會影響線段／管段明細與預算 mapping。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_convert_legacy_objects.png"><span class="button-name">轉換舊物件</span><span class="cmd">QTO_CONVERT_LEGACY_OBJECTS</span></td><td>把選取的既有圖塊、線段或聚合線轉成 QTO 物件。</td><td>只處理選取物件；轉換後仍要確認設備類型、系統與單位。</td></tr>
+      </tbody></table>
+
+      <h3>8.4 Excel 同步</h3>
+      <table class="tight"><thead><tr><th>圖示／按鈕</th><th>用途</th><th>連動與提醒</th></tr></thead><tbody>
+        <tr><td><img class="icon" src="user-guide-assets/qto_panel.png"><span class="button-name">同步主控</span><span class="cmd">QTO_PANEL</span></td><td>選擇／建立案件 Excel、啟停自動同步、開啟預算設定與查看同步紀錄。</td><td>Excel 路徑隨 DWG 保存；切換圖面時要看清目前路徑。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_sync_full_rebuild.png"><span class="button-name">重整 Excel</span><span class="cmd">QTO_SYNC_FULL_REBUILD</span></td><td>立即依全圖現況重新整理受外掛管理的 Excel 工作表。</td><td>不是每次修改都要按；同步異常、初次建立或規則變更時使用。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_validate.png"><span class="button-name">檢查修復</span><span class="cmd">QTO_VALIDATE</span></td><td>開啟統一 Review 清單，篩選、定位、多選與安全修復。</td><td>設備、系統、材料、mapping 不會自動猜；需人工確認。</td></tr>
+      </tbody></table>
+
+      <h3>8.5 樓層／系統</h3>
+      <table class="tight"><thead><tr><th>圖示／按鈕</th><th>用途</th><th>連動與提醒</th></tr></thead><tbody>
+        <tr><td><img class="icon" src="user-guide-assets/qto_scope_define_floor.png"><span class="button-name">樓層框</span><span class="cmd">QTO_SCOPE_DEFINE_FLOOR</span></td><td>把封閉 Polyline 設為樓層範圍，只覆蓋框內 QTO 物件的樓層。</td><td>不修改系統；無 QTO 物件跳過。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_scope_define_system.png"><span class="button-name">系統框</span><span class="cmd">QTO_SCOPE_DEFINE_SYSTEM</span></td><td>把封閉 Polyline 設為系統範圍，只覆蓋框內 QTO 物件的系統。</td><td>不修改樓層；同類框重疊時最後設定者優先。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_scope_clear.png"><span class="button-name">清除框線</span><span class="cmd">QTO_SCOPE_CLEAR</span></td><td>清除選取 Polyline 的樓層框／系統框身分。</td><td>不刪除 Polyline 幾何本身；之後可重新套用全部。</td></tr>
+      </tbody></table>
+
+      <h3>8.6 預算前置</h3>
+      <table class="tight"><thead><tr><th>圖示／按鈕</th><th>用途</th><th>連動與提醒</th></tr></thead><tbody>
+        <tr><td><img class="icon" src="user-guide-assets/qto_property_panel.png"><span class="button-name">屬性面板</span><span class="cmd">QTO_PROPERTY_PANEL</span></td><td>查看與修改設備類型、計量型態、系統、線材、位置、數量依據與狀態。</td><td>最常用的資料檢視入口；多選時避免覆蓋不想改的欄位。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_budget_mapping.png"><span class="button-name">預算對應</span><span class="cmd">QTO_BUDGET_MAPPING</span></td><td>匯入正式預算階層，把 CAD 群組對應到一個或多個預算明細。</td><td>建立後還要確認規則；候選不等於正式。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_budget_completeness.png"><span class="button-name">完整性檢查</span><span class="cmd">QTO_BUDGET_COMPLETENESS</span></td><td>找出 CAD／預算缺口、待確認、單位衝突與重複規則。</td><td>完成 mapping 後、送估算前、重大改圖後使用。</td></tr>
+      </tbody></table>
+
+      <h3>8.7 出線口</h3>
+      <table class="tight"><thead><tr><th>圖示／按鈕</th><th>用途</th><th>連動與提醒</th></tr></thead><tbody>
+        <tr><td><img class="icon" src="user-guide-assets/qto_mark_outlets.png"><span class="button-name">標記出線口</span><span class="cmd">QTO_MARK_OUTLETS</span></td><td>把選取圖塊標記為出線口。</td><td>後續可編號、指向箱體、建立配線與匯出清單。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_label_outlets.png"><span class="button-name">編號標註</span><span class="cmd">QTO_LABEL_OUTLETS</span></td><td>在選取出線口上方批次產生編號標註。</td><td>先確認出線口編號，避免重複或空白標註。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_callout_to_jb.png"><span class="button-name">指向箱體</span><span class="cmd">QTO_CALLOUT_TO_JB</span></td><td>產生指向箱體的短箭頭與箱體名稱標註。</td><td>先標記箱體並設定箱體編號。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_edit_outlet_properties.png"><span class="button-name">編輯出線口</span><span class="cmd">QTO_EDIT_OUTLET_PROPERTIES</span></td><td>批次修改出線口編號、箱體編號、系統與線材。</td><td>適合既有案件；較完整欄位改用屬性面板。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_delete_outlet_info.png"><span class="button-name">刪除出線口</span><span class="cmd">QTO_DELETE_OUTLET_INFO</span></td><td>清除選取圖塊的出線口 QTO 資訊。</td><td>通常不刪除圖塊幾何；操作後會退出出線口計量與關聯。</td></tr>
+      </tbody></table>
+
+      <h3>8.8 箱體</h3>
+      <table class="tight"><thead><tr><th>圖示／按鈕</th><th>用途</th><th>連動與提醒</th></tr></thead><tbody>
+        <tr><td><img class="icon" src="user-guide-assets/qto_mark_jb.png"><span class="button-name">標記箱體</span><span class="cmd">QTO_MARK_JB</span></td><td>把選取圖塊標記為接線箱／箱體。</td><td>後續可被出線口指向或作為配線終點。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_edit_jb_properties.png"><span class="button-name">編輯箱體</span><span class="cmd">QTO_EDIT_JB_PROPERTIES</span></td><td>批次修改箱體編號與系統。</td><td>箱體編號應唯一；修改後檢查出線口關聯。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_delete_jb_info.png"><span class="button-name">刪除箱體</span><span class="cmd">QTO_DELETE_JB_INFO</span></td><td>清除選取圖塊的箱體 QTO 資訊。</td><td>可能使既有出線口關聯失效，完成後跑檢查修復。</td></tr>
+      </tbody></table>
+
+      <h3>8.9 線槽</h3>
+      <table class="tight"><thead><tr><th>圖示／按鈕</th><th>用途</th><th>連動與提醒</th></tr></thead><tbody>
+        <tr><td><img class="icon" src="user-guide-assets/qto_mark_tray.png"><span class="button-name">標記線槽</span><span class="cmd">QTO_MARK_TRAY</span></td><td>把 Polyline 標記為線槽網路。</td><td>後續可供尋路；需確認端點是否相接。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_batch_route_by_tray.png"><span class="button-name">批次尋路</span><span class="cmd">QTO_BATCH_ROUTE_BY_TRAY</span></td><td>讓多個出線口依已標記線槽網路尋路。</td><td>是進階工具；先確認線槽網路連續與端點正確。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_conduit_to_tray.png"><span class="button-name">管段到線槽</span><span class="cmd">QTO_CONDUIT_TO_TRAY</span></td><td>由出線口建立到最近線槽的正交管段並統計長度。</td><td>框選線槽與出線口；完成後抽查最近線槽是否合理。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_clear_tray_properties.png"><span class="button-name">清除線槽屬性</span><span class="cmd">QTO_CLEAR_TRAY_PROPERTIES</span></td><td>清除選取 Polyline 的線槽 QTO 資訊。</td><td>不一定刪除線；會退出線槽網路與計量。</td></tr>
+      </tbody></table>
+
+      <h3>8.10 報表</h3>
+      <table class="tight"><thead><tr><th>圖示／按鈕</th><th>用途</th><th>連動與提醒</th></tr></thead><tbody>
+        <tr><td><img class="icon" src="user-guide-assets/qto_export_outlets.png"><span class="button-name">出線口清單</span><span class="cmd">QTO_EXPORT_OUTLETS</span></td><td>匯出所有出線口資料，檢查編號、系統與箱體對應。</td><td>適合開會、查漏與配置回調。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_check_wire.png"><span class="button-name">配線關係明細</span><span class="cmd">QTO_CHECK_WIRE</span></td><td>檢查出線口、箱體與配線關係並輸出 CSV。</td><td>只檢查與輸出，不改變圖面物件。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_export_jb_summary.png"><span class="button-name">線段明細</span><span class="cmd">QTO_EXPORT_JB_SUMMARY</span></td><td>輸出每個出線口的線段長度與箱體小計。</td><td>適合檢查配線量與箱體分配。</td></tr>
+        <tr><td><img class="icon" src="user-guide-assets/qto_export_conduit_summary.png"><span class="button-name">管段明細</span><span class="cmd">QTO_EXPORT_CONDUIT_SUMMARY</span></td><td>重新計算並輸出 QTO 管段長度。</td><td>適合配管數量檢查；不是正式報價表。</td></tr>
+      </tbody></table>
+    </section>
+
+    <section id="windows">
+      <h2>9. 主要視窗怎麼操作</h2>
+      <h3>9.1 案件設定：先看狀態，再決定要不要設定</h3>
+      <p>案件設定不是每次都要填完的表單。它是一張本案狀態總覽：圖塊庫可先設定；Excel、正式預算與範圍框在需要時再接上。操作順序建議由上往下：</p>
+      <ol>
+        <li>確認目前 DWG 名稱。</li>
+        <li>選擇或檢查圖塊資料庫。</li>
+        <li>選擇／建立本案 Excel。</li>
+        <li>需要估算時開預算對應與完整性檢查。</li>
+        <li>確認樓層框、系統框數量與同步是否啟用。</li>
+      </ol>
+
+      <h3>9.2 預算對應：三步驟，不要從空白表格猜</h3>
+      <table class="step-table">
+        <tr><td>1</td><td><strong>選擇預算來源</strong>：匯入既有 Excel 的正式預算階層。右側若完全空白，先確認是否已匯入，不要直接建立 mapping。</td></tr>
+        <tr><td>2</td><td><strong>建立對應</strong>：左側多選 CAD 計量群組，右側多選正式預算明細，選擇數量規則後建立。</td></tr>
+        <tr><td>3</td><td><strong>檢查並儲存</strong>：確認規則狀態、單位與重複項，再儲存。只有 confirmed 規則可進正式數量。</td></tr>
+      </table>
+
+      <h3>9.3 圖塊庫管理與插入</h3>
+      <ul>
+        <li><strong>管理圖塊庫：</strong>面向公司圖塊整理人員，需要搜尋、多選、預覽與批次設定。</li>
+        <li><strong>插入圖塊：</strong>面向設計人員，重點是快速搜尋與辨認圖形。</li>
+        <li><strong>更新專案圖塊：</strong>面向專案維護，只在標準庫有新版時使用，必須先看差異。</li>
+      </ul>
+      <p>圖塊來源以 DWG 為主。背景索引由外掛維護，設計人員不必了解 JSON 格式。</p>
+
+      <h3>9.4 同步主控</h3>
+      <p>同步主控主要回答四個問題：目前連到哪個 Excel、同步是否啟用、上次何時更新、還有多少問題。一般日常只需要：</p>
+      <ol>
+        <li>確認 Excel 路徑。</li>
+        <li>按啟用／暫停同步。</li>
+        <li>必要時開檢查清單或預算表設定。</li>
+        <li>發生異常時查看同步紀錄，再決定是否重整 Excel。</li>
+      </ol>
+    </section>
+
+    <section id="maintenance" class="page-break">
+      <h2>10. 日常維護與公司管理</h2>
+      <h3>10.1 設計人員每案要維護什麼</h3>
+      <ul class="checklist">
+        <li>確認案件 DWG 連到正確的 Excel。</li>
+        <li>新增設備類型時，名稱、系統、計量型態與單位要一致。</li>
+        <li>樓層框與系統框移動或改範圍後，抽查框內物件。</li>
+        <li>正式估算前，處理 Review 與完整性缺口。</li>
+        <li>重大改圖後，確認 Excel 數量與人工欄位都保留。</li>
+      </ul>
+
+      <h3>10.2 公司管理者要維護什麼</h3>
+      <table>
+        <thead><tr><th>項目</th><th>建議負責人</th><th>維護原則</th></tr></thead>
+        <tbody>
+          <tr><td>標準圖例 DWG</td><td>CAD／弱電標準管理者</td><td>圖塊名稱穩定、圖形可辨識、插入基準一致；更新前留版本。</td></tr>
+          <tr><td>設備類型與系統分類</td><td>設計主管或估算管理者</td><td>避免同物異名；代碼少改、顯示名稱可中文化。</td></tr>
+          <tr><td>公司預算規則</td><td>估算／成本管理者</td><td>只把跨案穩定且已驗證的規則升級為公司規則。</td></tr>
+          <tr><td>安裝包版本</td><td>IT 或指定管理者</td><td>所有同事使用同一 Release 安裝包，不用 GitHub 原始碼 ZIP。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>10.3 圖塊庫更新守則</h3>
+      <ol>
+        <li>先在標準圖例 DWG 完成圖形與屬性測試。</li>
+        <li>在圖塊庫管理器重新掃描並確認分類。</li>
+        <li>專案內使用「更新專案圖塊」查看差異與影響實例數。</li>
+        <li>只勾選確認過的圖塊更新。</li>
+        <li>更新後執行 Review，處理移除屬性、動態參數或衝突。</li>
+      </ol>
+      <div class="callout danger">不要用背景無提示方式整批替換專案圖塊。動態圖塊、匿名圖塊、外部參考或人工修改過的定義可能需要逐案判斷。</div>
+
+      <h3>10.4 Excel 維護守則</h3>
+      <ul>
+        <li>原始預算工作表保持不動；外掛主要管理「預算草稿」與技術工作表。</li>
+        <li>人工單價、倍數、廠牌、備註與確認狀態放在外掛保留欄位。</li>
+        <li>不要任意刪除隱藏的 QTO 技術工作表；它們用來保存同步與 mapping 稽核資料。</li>
+        <li>AutoCAD 與 Excel 建議用相同權限開啟，避免一個用系統管理員、另一個用一般權限。</li>
+        <li>案件交付時，DWG 與對應 Excel 應成對保存。</li>
+      </ul>
+
+      <h3>10.5 外掛更新</h3>
+      <ol>
+        <li>完整關閉 AutoCAD。</li>
+        <li>使用 GitHub Release 內的安裝包，不使用「Code → Download ZIP」。</li>
+        <li>解壓縮後執行 <code>install_or_update_QtoWirePlugin.bat</code>。</li>
+        <li>執行 <code>check_installation.bat</code> 確認版本與 DLL。</li>
+        <li>重開 AutoCAD，確認 Ribbon 顯示「QTO 弱電計算」。</li>
+      </ol>
+    </section>
+
+    <section id="troubleshooting">
+      <h2>11. 常見問題排除</h2>
+      <table>
+        <thead><tr><th>現象</th><th>先檢查</th><th>處理方式</th></tr></thead>
+        <tbody>
+          <tr><td>Ribbon 沒出現</td><td>是否安裝完成、AutoCAD 是否重開。</td><td>執行 <code>QTO_SHOW_UI</code>；仍無效則跑安裝檢查。</td></tr>
+          <tr><td>屬性面板是空白</td><td>目前是否選到有 QTO 資訊的物件。</td><td>按「挑選」或先用「轉換舊物件／標記」建立 QTO 資訊。</td></tr>
+          <tr><td>設備／系統下拉沒有內容</td><td>圖塊資料庫與字典是否載入。</td><td>從案件設定或管理圖塊庫重新選擇標準圖例 DWG。</td></tr>
+          <tr><td>樓層框沒有套用</td><td>Polyline 是否封閉、框內物件是否已有 QTO 資訊。</td><td>確認範圍後用範圍管理套用全部；普通物件需先轉換。</td></tr>
+          <tr><td>Excel 沒更新</td><td>目前 DWG 是否連到正確 Excel、自動同步是否啟用。</td><td>先看同步紀錄，再按重整 Excel；不要直接重建另一個檔案。</td></tr>
+          <tr><td>Excel 開著時更新失敗</td><td>AutoCAD 與 Excel 權限是否一致、Excel 是否正在編輯儲存格。</td><td>完成儲存格編輯，保持相同權限，再重試。</td></tr>
+          <tr><td>複製後出現重複同步 ID</td><td>物件是否由非一般 CAD 複製流程產生。</td><td>開檢查修復，多選問題後只修復同步 ID。</td></tr>
+          <tr><td>預算右側空白</td><td>是否已匯入正式預算格式。</td><td>在預算對應第一步先選 Excel 並匯入。</td></tr>
+          <tr><td>完整性問題很多</td><td>是否仍在初次建立 mapping。</td><td>先處理 CAD 有、預算無；再把人工／固定／不適用品項分類。</td></tr>
+          <tr><td>CAD 變卡</td><td>是否有大量物件變更、範圍框重疊、同步頻繁。</td><td>大量整理前暫停同步；分批操作；完成後再重整 Excel 與 Review。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>回報問題時請準備</h3>
+      <ul class="checklist">
+        <li>外掛版本與 AutoCAD 版本。</li>
+        <li>問題發生前按了哪些按鈕。</li>
+        <li>AutoCAD 命令列完整訊息與錯誤視窗。</li>
+        <li>目前 DWG 與 Excel 路徑。</li>
+        <li>可重現問題的小型測試 DWG／Excel。</li>
+        <li>螢幕截圖，包含 Ribbon、視窗與命令列。</li>
+      </ul>
+    </section>
+
+    <section id="checklists" class="page-break">
+      <h2>12. 工作前後檢查表</h2>
+      <h3>12.1 新案開始</h3>
+      <ul class="checklist">
+        <li>目前 DWG 名稱與案件正確。</li>
+        <li>標準圖例 DWG 已選擇。</li>
+        <li>常用圖塊可搜尋、預覽與插入。</li>
+        <li>需要時已建立樓層框與系統框。</li>
+        <li>預算 Excel 尚未需要時保持未啟用，不影響繪圖。</li>
+      </ul>
+
+      <h3>12.2 每日收工前</h3>
+      <ul class="checklist">
+        <li>新增／複製的設備可在屬性面板看到 QTO 資訊。</li>
+        <li>移動跨樓層／系統範圍的物件已抽查。</li>
+        <li>重要配線與管段長度合理。</li>
+        <li>Review 沒有未處理的重大錯誤。</li>
+        <li>若啟用同步，Excel 已更新且人工欄位仍保留。</li>
+      </ul>
+
+      <h3>12.3 送估算或開會前</h3>
+      <ul class="checklist">
+        <li>出線口、箱體、設備與配線關係已檢查。</li>
+        <li>CAD 有、預算無的項目已完成 mapping 或註明原因。</li>
+        <li>預算有、CAD 無的項目已分類為人工、固定、不適用或待處理。</li>
+        <li>未確認 mapping 未納入正式合計。</li>
+        <li>出線口清單、配線關係明細或樓層數量可供會議查詢。</li>
+        <li>重要數量仍由設計／估算人員抽查，不只看外掛狀態。</li>
+      </ul>
+
+      <h3>12.4 交付或封存前</h3>
+      <ul class="checklist">
+        <li>DWG、對應 Excel、正式預算來源成套保存。</li>
+        <li>公司標準圖塊更新已完成必要 Review。</li>
+        <li>同步紀錄與完整性問題沒有未說明的錯誤。</li>
+        <li>接手人知道本案圖塊庫、Excel 與 mapping 狀態。</li>
+      </ul>
+
+      <div class="callout good"><strong>最重要的工作原則：</strong>先讓圖面上的物件有正確、可辨認的 QTO 資訊，再談自動統計與預算。資料分類錯誤時，自動化只會更快地得到錯誤結果。</div>
+    </section>
+
+    <section>
+      <h2>附錄：常用名詞白話表</h2>
+      <table class="tight">
+        <thead><tr><th>名詞</th><th>白話解釋</th></tr></thead>
+        <tbody>
+          <tr><td>QTO</td><td>Quantity Takeoff，數量計算與彙整。</td></tr>
+          <tr><td>QTO 物件</td><td>已加上 QTO 工作資訊、會被外掛計量的 CAD 物件。</td></tr>
+          <tr><td>同步 ID</td><td>每個 QTO 物件的唯一識別碼，讓 CAD 與 Excel 知道是哪一筆。</td></tr>
+          <tr><td>Catalog／圖塊資料庫</td><td>從標準圖例 DWG 整理出的圖塊清單與預設分類。</td></tr>
+          <tr><td>Mapping／預算對應</td><td>把 CAD 的設備或長度，連到正式預算明細與數量規則。</td></tr>
+          <tr><td>Candidate</td><td>候選規則，僅供參考，尚未正式確認。</td></tr>
+          <tr><td>Confirmed</td><td>已由人員確認，可納入正式預算草稿數量。</td></tr>
+          <tr><td>Review</td><td>需要檢查、修復或人工判斷的問題清單。</td></tr>
+          <tr><td>範圍框</td><td>用封閉 Polyline 管理樓層或系統的區域，不是計量物件。</td></tr>
+        </tbody>
+      </table>
+      <p class="small">文件依 QtoWirePlugin v1.0.1 現有程式、Ribbon 命令與操作視窗整理。介面更新後應同步重製圖示與畫面，避免手冊與實際版本分離。</p>
+    </section>
+  </div>
+</main>
+</body>
+</html>
